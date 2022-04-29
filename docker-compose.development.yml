@@ -1,0 +1,72 @@
+services:
+  dozzle:
+    env_file:
+      - .env
+    environment:
+      DOZZLE_BASE: /control/dozzle
+      DOZZLE_KEY: ${DOZZLE_KEY}
+      DOZZLE_USERNAME: ${DOZZLE_USERNAME}
+      DOZZLE_PASSWORD: ${DOZZLE_PASSWORD}
+    image: amir20/dozzle:${TAG_DOZZLE}
+    restart: ${RESTART}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  postgres:
+    command: ['postgres', '-c', 'log_statement=all']
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_BASENAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    image: postgres:${TAG_POSTGRES}
+    restart: ${RESTART}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  adminer:
+    depends_on:
+      - postgres
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    image: adminer:${TAG_ADMINER}
+    restart: ${RESTART}
+
+  server:
+    build:
+      args:
+        tag: ${TAG_NODE}
+      context: ./server
+      target: development
+    command: npm run start:dev
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    restart: ${RESTART}
+    volumes:
+      - ./app/server:/home/node/app/src
+
+  nginx:
+    env_file:
+      - .env
+    depends_on:
+      - dozzle
+      - adminer
+      - server
+    image: nginx:${TAG_NGINX}
+    ports:
+      - ${PORT}:8080
+    restart: ${RESTART}
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+
+volumes:
+  postgres:
+    driver: local
+    external: false
