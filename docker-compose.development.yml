@@ -3,7 +3,7 @@ services:
     env_file:
       - .env
     environment:
-      DOZZLE_BASE: /control/dozzle
+      DOZZLE_BASE: /admin/dozzle
       DOZZLE_KEY: ${DOZZLE_KEY}
       DOZZLE_USERNAME: ${DOZZLE_USERNAME}
       DOZZLE_PASSWORD: ${DOZZLE_PASSWORD}
