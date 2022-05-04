@@ -3,22 +3,34 @@ import {
   Column,
   PrimaryColumn,
   Generated,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
   Index,
-  OneToMany,
+  ManyToMany,
 } from 'typeorm';
 import { Picture } from './../picture/picture.entity';
 import { bigint } from './../../common/functions/entity';
 
 @Entity()
-export class Mime {
+export class Tag {
   @Generated('increment')
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
   id!: number;
 
   @Index()
-  @Column({ type: 'varchar', length: 5, unique: true })
-  type!: string;
+  @Column({ type: 'varchar', length: 50, unique: true })
+  name!: string;
 
-  @OneToMany(() => Picture, (picture) => picture.mime)
+  @CreateDateColumn()
+  createdDate!: Date;
+
+  @UpdateDateColumn()
+  updatedDate!: Date;
+
+  @DeleteDateColumn()
+  deletedDate!: Date;
+
+  @ManyToMany(() => Picture, (picture) => picture.tags)
   pictures!: Picture[];
 }

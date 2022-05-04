@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { Mime } from './modules/mime/mime.entity';
 import { validate, EnvironmentVariables } from './env.validation';
 import * as path from 'path';
+import { MimeModule } from './modules/mime/mime.module';
+import { PictureModule } from './modules/picture/picture.module';
+import { TagModule } from './modules/tag/tag.module';
 
 @Module({
   imports: [
@@ -37,7 +39,12 @@ import * as path from 'path';
       inject: [ConfigService],
     }),
 
-    TypeOrmModule.forFeature([Mime]),
+    /**
+     * Custom modules
+     */
+    MimeModule,
+    PictureModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [],
