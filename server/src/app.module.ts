@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Mime } from './mime/mime.entity';
-import { validate } from './env.validation';
+import { validate, EnvironmentVariables } from './env.validation';
 import * as path from 'path';
 
 @Module({
@@ -23,13 +23,15 @@ import * as path from 'path';
      */
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (
+        configService: ConfigService<EnvironmentVariables, true>,
+      ) => ({
         type: 'postgres',
         port: 5432,
         host: 'postgres',
-        username: configService.get<string>('PG_USER', ''),
-        password: configService.get<string>('PG_PASSWORD', ''),
-        database: configService.get<string>('PG_BASENAME', ''),
+        username: configService.get('PG_USER'),
+        password: configService.get('PG_PASSWORD'),
+        database: configService.get('PG_BASENAME'),
         synchronize: true,
         autoLoadEntities: true,
       }),

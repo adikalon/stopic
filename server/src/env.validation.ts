@@ -6,7 +6,7 @@ enum Environment {
   Production = 'production',
 }
 
-class EnvironmentVariables {
+export class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV!: Environment;
 
