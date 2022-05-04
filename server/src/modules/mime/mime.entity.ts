@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, Generated } from 'typeorm';
-import { bigint } from './../common/functions/entity';
+import { bigint } from './../../common/functions/entity';
 
 @Entity()
 export class Mime {
