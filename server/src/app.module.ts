@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { Mime } from './modules/mime/mime.entity';
 import { validate, EnvironmentVariables } from './env.validation';
 import * as path from 'path';
@@ -41,6 +40,6 @@ import * as path from 'path';
     TypeOrmModule.forFeature([Mime]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
