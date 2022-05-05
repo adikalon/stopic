@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Banned } from './../banned/banned.entity';
 import { bigint } from './../../common/functions/entity';
+import { View } from './../view/view.entity';
 
 @Entity()
 @Unique(['ip', 'userAgent'])
@@ -39,4 +40,7 @@ export class Visitor {
 
   @OneToMany(() => Banned, (banned) => banned.visitor)
   banneds!: Banned[];
+
+  @OneToMany(() => View, (view) => view.visitor)
+  views!: View[];
 }

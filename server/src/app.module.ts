@@ -9,6 +9,7 @@ import { PictureModule } from './modules/picture/picture.module';
 import { TagModule } from './modules/tag/tag.module';
 import { VisitorModule } from './modules/visitor/visitor.module';
 import { BannedModule } from './modules/banned/banned.module';
+import { ViewModule } from './modules/view/view.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { BannedModule } from './modules/banned/banned.module';
     TagModule,
     VisitorModule,
     BannedModule,
+    ViewModule,
   ],
   controllers: [AppController],
   providers: [],

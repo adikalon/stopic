@@ -11,10 +11,12 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Mime } from './../mime/mime.entity';
 import { bigint } from './../../common/functions/entity';
 import { Tag } from './../tag/tag.entity';
+import { View } from '../view/view.entity';
 
 @Entity()
 @Check('"width" > 0 AND "height" > 0 AND "size" > 0')
@@ -98,4 +100,7 @@ export class Picture {
   @ManyToMany(() => Tag, (tag) => tag.pictures)
   @JoinTable()
   tags!: Tag[];
+
+  @OneToMany(() => View, (view) => view.visitor)
+  views!: View[];
 }
