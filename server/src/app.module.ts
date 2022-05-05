@@ -7,6 +7,7 @@ import * as path from 'path';
 import { MimeModule } from './modules/mime/mime.module';
 import { PictureModule } from './modules/picture/picture.module';
 import { TagModule } from './modules/tag/tag.module';
+import { VisitorModule } from './modules/visitor/visitor.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { TagModule } from './modules/tag/tag.module';
     MimeModule,
     PictureModule,
     TagModule,
+    VisitorModule,
   ],
   controllers: [AppController],
   providers: [],
