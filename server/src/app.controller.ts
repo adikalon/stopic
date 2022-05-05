@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Header } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  @Get()
-  getHello(): string {
-    return 'stopic';
+  @Get('robots.txt')
+  @Header('Content-Type', 'text/plain')
+  robots(): string {
+    return 'User-agent: *';
   }
 }
