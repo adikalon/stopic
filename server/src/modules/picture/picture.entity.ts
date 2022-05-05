@@ -96,6 +96,6 @@ export class Picture {
   deletedDate!: Date;
 
   @ManyToMany(() => Tag, (tag) => tag.pictures)
-  @JoinTable({ name: 'picture_tag' })
+  @JoinTable()
   tags!: Tag[];
 }
