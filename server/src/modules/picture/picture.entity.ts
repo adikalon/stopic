@@ -16,7 +16,8 @@ import {
 import { Mime } from './../mime/mime.entity';
 import { bigint } from './../../common/functions/entity';
 import { Tag } from './../tag/tag.entity';
-import { View } from '../view/view.entity';
+import { View } from './../view/view.entity';
+import { Download } from './../download/download.entity';
 
 @Entity()
 @Check('"width" > 0 AND "height" > 0 AND "size" > 0')
@@ -103,4 +104,7 @@ export class Picture {
 
   @OneToMany(() => View, (view) => view.visitor)
   views!: View[];
+
+  @OneToMany(() => Download, (download) => download.visitor)
+  downloads!: Download[];
 }

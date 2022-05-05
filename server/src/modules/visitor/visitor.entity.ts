@@ -13,6 +13,7 @@ import {
 import { Banned } from './../banned/banned.entity';
 import { bigint } from './../../common/functions/entity';
 import { View } from './../view/view.entity';
+import { Download } from './../download/download.entity';
 
 @Entity()
 @Unique(['ip', 'userAgent'])
@@ -43,4 +44,7 @@ export class Visitor {
 
   @OneToMany(() => View, (view) => view.visitor)
   views!: View[];
+
+  @OneToMany(() => Download, (download) => download.visitor)
+  downloads!: Download[];
 }
