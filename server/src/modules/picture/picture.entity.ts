@@ -36,8 +36,52 @@ export class Picture {
   size!: number;
 
   @Index()
-  @Column({ type: 'varchar', length: 30, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   link!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255, unique: true })
+  hash!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  url!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  header!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  altFull!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  altPreview!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  nameFull!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  namePreview!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  titleMeta!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  titleAttribute!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  descriptionPage!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  descriptionMeta!: string;
 
   @ManyToOne(() => Mime, (mime) => mime.pictures, { nullable: false })
   mime!: Mime;
