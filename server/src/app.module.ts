@@ -8,6 +8,7 @@ import { MimeModule } from './modules/mime/mime.module';
 import { PictureModule } from './modules/picture/picture.module';
 import { TagModule } from './modules/tag/tag.module';
 import { VisitorModule } from './modules/visitor/visitor.module';
+import { BannedModule } from './modules/banned/banned.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { VisitorModule } from './modules/visitor/visitor.module';
     PictureModule,
     TagModule,
     VisitorModule,
+    BannedModule,
   ],
   controllers: [AppController],
   providers: [],

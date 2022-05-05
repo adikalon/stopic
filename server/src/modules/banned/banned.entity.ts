@@ -6,27 +6,22 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  Index,
-  Unique,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
-import { Banned } from './../banned/banned.entity';
+import { Visitor } from './../visitor/visitor.entity';
 import { bigint } from './../../common/functions/entity';
 
 @Entity()
-@Unique(['ip', 'userAgent'])
-export class Visitor {
+export class Banned {
   @Generated('increment')
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
   id!: number;
 
-  @Index()
-  @Column({ type: 'varchar', length: 105 })
-  ip!: string;
+  @ManyToOne(() => Visitor, (visitor) => visitor.banneds, { nullable: false })
+  visitor!: Visitor;
 
-  @Index()
-  @Column({ type: 'varchar', length: 505 })
-  userAgent!: string;
+  @Column({ type: 'timestamp' })
+  bannedTo!: Date;
 
   @CreateDateColumn()
   createdDate!: Date;
@@ -36,7 +31,4 @@ export class Visitor {
 
   @DeleteDateColumn()
   deletedDate!: Date;
-
-  @OneToMany(() => Banned, (banned) => banned.visitor)
-  banneds!: Banned[];
 }
