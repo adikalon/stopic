@@ -8,6 +8,7 @@ import {
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { QueryFailedError } from 'typeorm';
+import { hasOwnProperty } from '../functions/has-own-property';
 
 @Catch()
 export class DefaultExceptionFilter extends BaseExceptionFilter {
@@ -22,10 +23,12 @@ export class DefaultExceptionFilter extends BaseExceptionFilter {
     const headers = JSON.stringify(request.headers, null, 2);
     const body = JSON.stringify(request.body, null, 2);
 
+    const id = Date.now();
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let title = 'Internal Server Error';
     let error = 'None';
     let stack = 'None';
+    let resp = `ErrorID: ${id}`;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
@@ -38,6 +41,10 @@ export class DefaultExceptionFilter extends BaseExceptionFilter {
       let res = exception.getResponse();
 
       if (typeof res === 'object') {
+        if (hasOwnProperty(res, 'message') && typeof res.message === 'string') {
+          resp = res.message;
+        }
+
         res = JSON.stringify(res, null, 2);
       }
 
@@ -68,10 +75,10 @@ export class DefaultExceptionFilter extends BaseExceptionFilter {
       error = JSON.stringify(exception, null, 2);
     }
 
-    const log = `${title} [${status}]\n\n[URL]:\n${url}\n\n[HEADERS]:\n${headers}\n\n[BODY]:\n${body}\n\n[ERROR]:\n${error}\n\n[STACK]:\n${stack}\n\n`;
+    const log = `${title} [${status}]\n\n[ID]:\n${id}\n\n[URL]:\n${url}\n\n[HEADERS]:\n${headers}\n\n[BODY]:\n${body}\n\n[ERROR]:\n${error}\n\n[STACK]:\n${stack}\n\n`;
 
     this.logger.error(log);
 
-    response.status(status).json('See logs');
+    response.status(status).set('Content-Type', 'text/plain').send(resp);
   }
 }
