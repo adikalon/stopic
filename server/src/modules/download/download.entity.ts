@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { Visitor } from './../visitor/visitor.entity';
-import { Picture } from './../picture/picture.entity';
-import { bigint } from './../../common/functions/entity';
+import { Visitor } from '../visitor/visitor.entity';
+import { Picture } from '../picture/picture.entity';
+import { bigint } from '../../common/functions/entity';
 
 @Entity()
 export class Download {

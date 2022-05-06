@@ -10,10 +10,10 @@ import {
   Unique,
   OneToMany,
 } from 'typeorm';
-import { Banned } from './../banned/banned.entity';
-import { bigint } from './../../common/functions/entity';
-import { View } from './../view/view.entity';
-import { Download } from './../download/download.entity';
+import { Banned } from '../banned/banned.entity';
+import { bigint } from '../../common/functions/entity';
+import { View } from '../view/view.entity';
+import { Download } from '../download/download.entity';
 
 @Entity()
 @Unique(['ip', 'userAgent'])

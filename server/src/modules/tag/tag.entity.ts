@@ -9,8 +9,8 @@ import {
   Index,
   ManyToMany,
 } from 'typeorm';
-import { Picture } from './../picture/picture.entity';
-import { bigint } from './../../common/functions/entity';
+import { Picture } from '../picture/picture.entity';
+import { bigint } from '../../common/functions/entity';
 
 @Entity()
 export class Tag {

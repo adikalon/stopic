@@ -8,8 +8,8 @@ import {
   DeleteDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { Visitor } from './../visitor/visitor.entity';
-import { bigint } from './../../common/functions/entity';
+import { Visitor } from '../visitor/visitor.entity';
+import { bigint } from '../../common/functions/entity';
 
 @Entity()
 export class Banned {

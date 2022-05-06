@@ -13,11 +13,11 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { Mime } from './../mime/mime.entity';
-import { bigint } from './../../common/functions/entity';
-import { Tag } from './../tag/tag.entity';
-import { View } from './../view/view.entity';
-import { Download } from './../download/download.entity';
+import { Mime } from '../mime/mime.entity';
+import { bigint } from '../../common/functions/entity';
+import { Tag } from '../tag/tag.entity';
+import { View } from '../view/view.entity';
+import { Download } from '../download/download.entity';
 
 @Entity()
 @Check('"width" > 0 AND "height" > 0 AND "size" > 0')
