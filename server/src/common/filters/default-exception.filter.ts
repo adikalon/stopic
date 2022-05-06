@@ -46,6 +46,8 @@ export class DefaultExceptionFilter extends BaseExceptionFilter {
         }
 
         res = JSON.stringify(res, null, 2);
+      } else if (typeof res === 'string') {
+        resp = res;
       }
 
       error = res;
