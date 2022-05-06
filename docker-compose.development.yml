@@ -7,6 +7,7 @@ services:
       DOZZLE_KEY: ${DOZZLE_KEY}
       DOZZLE_USERNAME: ${DOZZLE_USERNAME}
       DOZZLE_PASSWORD: ${DOZZLE_PASSWORD}
+      DOZZLE_NO_ANALYTICS: true
     image: amir20/dozzle:${TAG_DOZZLE}
     restart: ${RESTART}
     volumes:
