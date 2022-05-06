@@ -2,9 +2,11 @@ import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DefaultExceptionFilter } from './common/filters/default-exception.filter';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalInterceptors(new TimeoutInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
