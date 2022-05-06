@@ -1,5 +1,6 @@
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { mw } from 'request-ip';
 import { AppModule } from './app.module';
 import { DefaultExceptionFilter } from './common/filters/default-exception.filter';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
@@ -24,6 +25,7 @@ async function bootstrap() {
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new DefaultExceptionFilter(httpAdapter));
+  app.use(mw());
   await app.listen(3000);
 }
 bootstrap();
