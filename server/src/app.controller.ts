@@ -4,7 +4,7 @@ import { Controller, Get, Header } from '@nestjs/common';
 export class AppController {
   @Get('robots.txt')
   @Header('Content-Type', 'text/plain')
-  robots(): string {
+  async robots(): Promise<string> {
     return 'User-agent: *';
   }
 }
