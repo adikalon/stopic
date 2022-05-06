@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -11,6 +16,8 @@ import { VisitorModule } from './modules/visitor/visitor.module';
 import { BannedModule } from './modules/banned/banned.module';
 import { ViewModule } from './modules/view/view.module';
 import { DownloadModule } from './modules/download/download.module';
+import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor.middleware';
+import { CheckHeadersMiddleware } from './common/middlewares/check-headers.middleware';
 
 @Module({
   imports: [
@@ -57,4 +64,10 @@ import { DownloadModule } from './modules/download/download.module';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CheckHeadersMiddleware, RegisterVisitorMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
