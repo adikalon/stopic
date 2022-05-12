@@ -7,7 +7,7 @@ import { VisitorRepository } from './visitor.repository';
 export class VisitorService {
   constructor(
     @InjectRepository(VisitorRepository)
-    private visitorRepository: VisitorRepository,
+    private readonly visitorRepository: VisitorRepository,
   ) {}
 
   async getVisitor(ip: string, userAgent: string) {
