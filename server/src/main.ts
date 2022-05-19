@@ -1,4 +1,5 @@
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { mw } from 'request-ip';
 import { AppModule } from './app.module';
@@ -7,7 +8,9 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalInterceptors(new TimeoutInterceptor());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,12 +23,24 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   app.setGlobalPrefix('api', {
     exclude: [{ path: 'robots.txt', method: RequestMethod.GET }],
   });
+
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new DefaultExceptionFilter(httpAdapter));
+
   app.use(mw());
+
+  const config = new DocumentBuilder()
+    .setTitle('Stopic')
+    .setDescription('API for frontend')
+    .setVersion('1.0.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();
