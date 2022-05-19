@@ -30,6 +30,7 @@ import { BannedGuard } from './common/guards/banned.guard';
       validate: validate,
       expandVariables: true,
       envFilePath: path.join(__dirname, '../../.env'),
+      isGlobal: true,
     }),
 
     /**

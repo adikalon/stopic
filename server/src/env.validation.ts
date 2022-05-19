@@ -18,6 +18,9 @@ export class EnvironmentVariables {
 
   @IsString()
   PG_BASENAME!: string;
+
+  @IsString()
+  ADMIN_TOKEN!: string;
 }
 
 export function validate(config: Record<string, unknown>) {
