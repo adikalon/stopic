@@ -17,7 +17,6 @@ import { BannedModule } from './modules/banned/banned.module';
 import { ViewModule } from './modules/view/view.module';
 import { DownloadModule } from './modules/download/download.module';
 import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor.middleware';
-import { CheckHeadersMiddleware } from './common/middlewares/check-headers.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
 
@@ -75,7 +74,7 @@ import { BannedGuard } from './common/guards/banned.guard';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(CheckHeadersMiddleware, RegisterVisitorMiddleware)
+      .apply(RegisterVisitorMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
