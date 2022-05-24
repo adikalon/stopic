@@ -19,6 +19,7 @@ import { DownloadModule } from './modules/download/download.module';
 import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -51,6 +52,11 @@ import { BannedGuard } from './common/guards/banned.guard';
       }),
       inject: [ConfigService],
     }),
+
+    /**
+     * Schedule
+     */
+    ScheduleModule.forRoot(),
 
     /**
      * Custom modules
