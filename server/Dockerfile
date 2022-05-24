@@ -4,7 +4,11 @@ FROM node:$tag AS development
 RUN \
   apk add --no-cache shadow \
   && mkdir -p /home/node/app \
-  && chown -R node:node /home/node/app
+  && chown -R node:node /home/node/app \
+  && mkdir -p /home/node/app/temp \
+  && chown -R node:node /home/node/app/temp \
+  && mkdir -p /home/node/app/storage \
+  && chown -R node:node /home/node/app/storage
 WORKDIR /home/node/app
 USER node
 COPY --chown=node:node package*.json ./
@@ -16,7 +20,11 @@ FROM node:$tag AS production
 RUN \
   apk add --no-cache shadow \
   && mkdir -p /home/node/app \
-  && chown -R node:node /home/node/app
+  && chown -R node:node /home/node/app \
+  && mkdir -p /home/node/app/temp \
+  && chown -R node:node /home/node/app/temp \
+  && mkdir -p /home/node/app/storage \
+  && chown -R node:node /home/node/app/storage
 WORKDIR /home/node/app
 USER node
 COPY --chown=node:node package*.json ./
