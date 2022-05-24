@@ -49,6 +49,8 @@ services:
     restart: ${RESTART}
     volumes:
       - ./server/src:/home/node/app/src
+      - temp:/home/node/app/temp
+      - storage:/home/node/app/storage
 
   nginx:
     env_file:
@@ -69,5 +71,11 @@ services:
 
 volumes:
   postgres:
+    driver: local
+    external: false
+  temp:
+    driver: local
+    external: false
+  storage:
     driver: local
     external: false
