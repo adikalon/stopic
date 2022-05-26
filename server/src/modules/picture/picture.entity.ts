@@ -26,6 +26,9 @@ export class Picture {
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
   id!: number;
 
+  @Column({ type: 'boolean' })
+  active!: boolean;
+
   @Index()
   @Column({ type: 'smallint' })
   width!: number;
