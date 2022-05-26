@@ -5,9 +5,9 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { validate, EnvironmentVariables } from './env.validation';
+import { validate } from './env.validation';
 import * as path from 'path';
 import { MimeModule } from './modules/mime/mime.module';
 import { PictureModule } from './modules/picture/picture.module';
@@ -20,6 +20,8 @@ import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor
 import { APP_GUARD } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TrashModule } from './modules/trash/trash.module';
+import { getConnectionOptions } from 'typeorm';
 
 @Module({
   imports: [
@@ -37,20 +39,10 @@ import { ScheduleModule } from '@nestjs/schedule';
      * TypeORM
      */
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (
-        configService: ConfigService<EnvironmentVariables, true>,
-      ) => ({
-        type: 'postgres',
-        port: 5432,
-        host: 'postgres',
-        username: configService.get('PG_USER'),
-        password: configService.get('PG_PASSWORD'),
-        database: configService.get('PG_BASENAME'),
-        synchronize: true,
-        autoLoadEntities: true,
-      }),
-      inject: [ConfigService],
+      useFactory: async () =>
+        Object.assign(await getConnectionOptions(), {
+          autoLoadEntities: true,
+        }),
     }),
 
     /**
@@ -68,6 +60,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     BannedModule,
     ViewModule,
     DownloadModule,
+    TrashModule,
   ],
   controllers: [AppController],
   providers: [
