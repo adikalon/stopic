@@ -55,6 +55,10 @@ export class Picture {
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
+  subFolder!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
   header!: string;
 
   @Index()
