@@ -21,7 +21,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TrashModule } from './modules/trash/trash.module';
-import { getConnectionOptions } from 'typeorm';
+import TypeORMConfig from './ormconfig';
 
 @Module({
   imports: [
@@ -38,12 +38,7 @@ import { getConnectionOptions } from 'typeorm';
     /**
      * TypeORM
      */
-    TypeOrmModule.forRootAsync({
-      useFactory: async () =>
-        Object.assign(await getConnectionOptions(), {
-          autoLoadEntities: true,
-        }),
-    }),
+    TypeOrmModule.forRoot(TypeORMConfig),
 
     /**
      * Schedule
