@@ -17,11 +17,12 @@ import { BannedModule } from './modules/banned/banned.module';
 import { ViewModule } from './modules/view/view.module';
 import { DownloadModule } from './modules/download/download.module';
 import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor.middleware';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TrashModule } from './modules/trash/trash.module';
 import TypeORMConfig from './ormconfig';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 @Module({
   imports: [
@@ -62,6 +63,10 @@ import TypeORMConfig from './ormconfig';
     {
       provide: APP_GUARD,
       useClass: BannedGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimeoutInterceptor,
     },
   ],
 })

@@ -4,15 +4,24 @@ import {
   ExecutionContext,
   CallHandler,
   RequestTimeoutException,
+  SetMetadata,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 
+export const RequestTimeout = (ms: number) => SetMetadata('timeout', ms);
+
 @Injectable()
 export class TimeoutInterceptor implements NestInterceptor {
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
+  constructor(private readonly reflector: Reflector) {}
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const ms =
+      this.reflector.get<number>('timeout', context.getHandler()) || 5000;
+
     return next.handle().pipe(
-      timeout(5000),
+      timeout(ms),
       catchError((err) => {
         if (err instanceof TimeoutError) {
           return throwError(() => new RequestTimeoutException());

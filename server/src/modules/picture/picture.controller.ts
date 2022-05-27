@@ -11,6 +11,7 @@ import { AdminGuard } from '../../common/guards/admin.guard';
 import { Express } from 'express';
 import { uploadFilter } from './upload-filter';
 import { UploadDto } from './dto/upload.dto';
+import { RequestTimeout } from '../../common/interceptors/timeout.interceptor';
 
 @Controller('picture')
 export class PictureController {
@@ -24,6 +25,7 @@ export class PictureController {
       limits: { fileSize: 10485760 },
     }),
   )
+  @RequestTimeout(30000)
   async upload(
     @UploadedFile() image: Express.Multer.File,
     @Body() body: UploadDto,
