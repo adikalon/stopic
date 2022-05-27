@@ -1,4 +1,4 @@
-import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { mw } from 'request-ip';
@@ -21,9 +21,7 @@ async function bootstrap() {
     }),
   );
 
-  app.setGlobalPrefix('api', {
-    exclude: [{ path: 'robots.txt', method: RequestMethod.GET }],
-  });
+  app.setGlobalPrefix('api');
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new DefaultExceptionFilter(httpAdapter));

@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
 import { validate } from './env.validation';
 import * as path from 'path';
 import { MimeModule } from './modules/mime/mime.module';
@@ -58,7 +57,7 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
     DownloadModule,
     TrashModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     {
       provide: APP_GUARD,
