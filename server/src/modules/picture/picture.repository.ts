@@ -12,7 +12,6 @@ export class PictureRepository extends Repository<Picture> {
         width: data.width,
         height: data.height,
         size: data.size,
-        link: data.link,
         hash: data.hash,
         url: data.url,
         subFolder: data.subFolder,

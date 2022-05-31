@@ -47,7 +47,6 @@ export class PictureController {
         width: 1,
         height: 1,
         size: 1,
-        link: Date.now().toString(),
         hash: Date.now().toString(),
         url: 'a',
         subFolder: 'a',

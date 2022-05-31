@@ -5,7 +5,6 @@ export interface CreateInterface {
   width: number;
   height: number;
   size: number;
-  link: string;
   hash: string;
   url: string;
   subFolder: string;

@@ -43,7 +43,7 @@ export class Picture {
   size!: number;
 
   @Index()
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
   link!: string;
 
   @Index()
