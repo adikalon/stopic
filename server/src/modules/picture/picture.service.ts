@@ -9,7 +9,7 @@ export class PictureService {
 
   @Cron('0 0 0 * * *')
   async cleanUpload() {
-    const pathFolder = path.join(__dirname, '/../../../temp/upload/');
+    const pathFolder = path.join(__dirname, '/../../../temp/');
 
     fs.access(pathFolder, (err) => {
       if (err) {

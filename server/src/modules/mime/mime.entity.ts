@@ -16,7 +16,7 @@ export class Mime {
   id!: number;
 
   @Index()
-  @Column({ type: 'varchar', length: 5, unique: true })
+  @Column({ type: 'varchar', length: 15, unique: true })
   type!: string;
 
   @OneToMany(() => Picture, (picture) => picture.mime)

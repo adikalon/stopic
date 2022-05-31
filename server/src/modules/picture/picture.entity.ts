@@ -12,6 +12,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Mime } from '../mime/mime.entity';
 import { bigint } from '../../common/functions/entity';
@@ -93,7 +94,11 @@ export class Picture {
   @Column({ type: 'varchar', length: 255 })
   descriptionMeta!: string;
 
+  @Column()
+  mimeId!: number;
+
   @ManyToOne(() => Mime, (mime) => mime.pictures, { nullable: false })
+  @JoinColumn({ name: 'mimeId', referencedColumnName: 'id' })
   mime!: Mime;
 
   @CreateDateColumn()
