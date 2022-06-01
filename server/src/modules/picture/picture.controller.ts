@@ -61,7 +61,7 @@ export class PictureController {
         active: false,
         width: metadata.width,
         height: metadata.height,
-        size: metadata.size,
+        size: image.size,
         hash: hash,
         url: body.url,
         subFolder: subFolder,
@@ -77,9 +77,14 @@ export class PictureController {
         mime: mime,
       });
 
-      const recordId = +result.raw[0].id;
+      const pictureId = +result.raw[0].id;
+      const archivePath = await this.pictureService.archivate({
+        imagePath: imagePath,
+        mimeType: mimeType,
+        pictureId: pictureId,
+      });
 
-      console.log(recordId);
+      console.log(archivePath);
     });
 
     return body;
