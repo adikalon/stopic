@@ -22,6 +22,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TrashModule } from './modules/trash/trash.module';
 import TypeORMConfig from './ormconfig';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
       provide: APP_INTERCEPTOR,
       useClass: TimeoutInterceptor,
     },
+    AppService,
   ],
 })
 export class AppModule implements NestModule {
