@@ -18,6 +18,7 @@ import { MimeRepository } from '../mime/mime.repository';
 import { MimeTypeEnum } from '../mime/mime-type.enum';
 import { PictureService } from './picture.service';
 import * as path from 'path';
+import * as moment from 'moment';
 
 @Controller('picture')
 export class PictureController {
@@ -48,6 +49,7 @@ export class PictureController {
       const mime = await mimeRepository.getMimeByString(mimeType);
       const imagePath = path.join(__dirname, '/../../../', image.path);
       const metadata = await this.pictureService.getMetadata(imagePath);
+      const subFolder = moment().format('YYYY-MM-DD');
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
@@ -56,7 +58,7 @@ export class PictureController {
         size: metadata.size,
         hash: Date.now().toString(),
         url: body.url,
-        subFolder: 'a',
+        subFolder: subFolder,
         header: body.header,
         altFull: body.altFull,
         altPreview: body.altPreview,
