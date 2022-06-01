@@ -69,5 +69,6 @@ export class UploadDto {
   @ArrayMinSize(1)
   @ArrayMaxSize(50)
   @ArrayUnique()
+  @Transform(({ value }) => value.map((v: string) => v.toLocaleLowerCase()))
   tags!: string[];
 }
