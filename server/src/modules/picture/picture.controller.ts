@@ -19,6 +19,7 @@ import { MimeTypeEnum } from '../mime/mime-type.enum';
 import { PictureService } from './picture.service';
 import * as path from 'path';
 import * as moment from 'moment';
+import ShortUniqueId from 'short-unique-id';
 
 @Controller('picture')
 export class PictureController {
@@ -50,13 +51,18 @@ export class PictureController {
       const imagePath = path.join(__dirname, '/../../../', image.path);
       const metadata = await this.pictureService.getMetadata(imagePath);
       const subFolder = moment().format('YYYY-MM-DD');
+      const uid = new ShortUniqueId({
+        length: 50,
+        dictionary: 'alphanum_lower',
+      });
+      const hash: string = uid();
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
         width: metadata.width,
         height: metadata.height,
         size: metadata.size,
-        hash: Date.now().toString(),
+        hash: hash,
         url: body.url,
         subFolder: subFolder,
         header: body.header,
