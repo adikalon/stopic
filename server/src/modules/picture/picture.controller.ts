@@ -20,6 +20,7 @@ import { PictureService } from './picture.service';
 import * as path from 'path';
 import * as moment from 'moment';
 import ShortUniqueId from 'short-unique-id';
+import { TagRepository } from '../tag/tag.repository';
 
 @Controller('picture')
 export class PictureController {
@@ -44,8 +45,9 @@ export class PictureController {
     @Body() body: UploadDto,
   ) {
     await this.connection.transaction(async (manager) => {
-      const mimeRepository = manager.getCustomRepository(MimeRepository);
       const pictureRepository = manager.getCustomRepository(PictureRepository);
+      const mimeRepository = manager.getCustomRepository(MimeRepository);
+      const tagRepository = manager.getCustomRepository(TagRepository);
       const mimeType = image.mimetype as MimeTypeEnum;
       const mime = await mimeRepository.getMimeByString(mimeType);
       const imagePath = path.join(__dirname, '/../../../', image.path);
@@ -84,6 +86,8 @@ export class PictureController {
         pictureId: pictureId,
       });
 
+      const tags = await tagRepository.getCreateTags(body.tags);
+      await pictureRepository.attachTags(tags, pictureId);
       console.log(archivePath);
     });
 

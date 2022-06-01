@@ -1,4 +1,5 @@
 import { EntityRepository, InsertResult, Repository } from 'typeorm';
+import { Tag } from '../tag/tag.entity';
 import { CreateInterface } from './interfaces/create.interface';
 import { Picture } from './picture.entity';
 
@@ -28,5 +29,12 @@ export class PictureRepository extends Repository<Picture> {
       })
       .returning('*')
       .execute();
+  }
+
+  async attachTags(tags: Tag[], pictureId: number): Promise<void> {
+    await this.createQueryBuilder()
+      .relation(Picture, 'tags')
+      .of(pictureId)
+      .add(tags);
   }
 }
