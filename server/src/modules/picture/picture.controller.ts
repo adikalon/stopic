@@ -16,10 +16,15 @@ import { Connection } from 'typeorm';
 import { PictureRepository } from './picture.repository';
 import { MimeRepository } from '../mime/mime.repository';
 import { MimeTypeEnum } from '../mime/mime-type.enum';
+import { PictureService } from './picture.service';
+import * as path from 'path';
 
 @Controller('picture')
 export class PictureController {
-  constructor(private readonly connection: Connection) {}
+  constructor(
+    private readonly connection: Connection,
+    private readonly pictureService: PictureService,
+  ) {}
 
   @Post('/')
   @RequestTimeout(30000)
@@ -41,14 +46,16 @@ export class PictureController {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const mimeType = image.mimetype as MimeTypeEnum;
       const mime = await mimeRepository.getMimeByString(mimeType);
+      const imagePath = path.join(__dirname, '/../../../', image.path);
+      const metadata = await this.pictureService.getMetadata(imagePath);
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
-        width: 1,
-        height: 1,
-        size: 1,
+        width: metadata.width,
+        height: metadata.height,
+        size: metadata.size,
         hash: Date.now().toString(),
-        url: 'a',
+        url: body.url,
         subFolder: 'a',
         header: body.header,
         altFull: body.altFull,
