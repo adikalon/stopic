@@ -1,7 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
+import * as path from 'path';
+import * as fsPromises from 'fs/promises';
 import { EnvironmentVariables } from '../../env.validation';
 
 @Injectable()
@@ -12,22 +14,55 @@ export class YandexDiskService {
   ) {}
 
   async upload(subFolder: string, filePath: string): Promise<void> {
-    const p = await lastValueFrom(
-      this.httpService
-        .request({
-          method: 'PUT',
-          url: 'https://cloud-api.yandex.net/v1/disk/resources',
-          params: {
-            path: subFolder,
-          },
-          headers: {
-            Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
-          },
-        })
-        .pipe(map((res) => res.data)),
+    const createSubFolder = await lastValueFrom(
+      this.httpService.request({
+        method: 'PUT',
+        url: 'https://cloud-api.yandex.net/v1/disk/resources',
+        params: { path: subFolder },
+        timeout: 15000,
+        validateStatus: () => true,
+        headers: {
+          Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
+        },
+      }),
     );
 
-    console.log(p);
-    console.log(filePath);
+    if (createSubFolder.status !== 201 && createSubFolder.status !== 409) {
+      throw new Error(createSubFolder.data.description);
+    }
+
+    const linkForFileUpload = await lastValueFrom(
+      this.httpService.request({
+        method: 'GET',
+        url: 'https://cloud-api.yandex.net/v1/disk/resources/upload',
+        params: { path: `${subFolder}/${path.basename(filePath)}` },
+        timeout: 15000,
+        validateStatus: () => true,
+        headers: {
+          Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
+        },
+      }),
+    );
+
+    if (linkForFileUpload.status !== 200) {
+      throw new Error(linkForFileUpload.data.description);
+    }
+
+    const uploadFile = await lastValueFrom(
+      this.httpService.request({
+        method: 'PUT',
+        url: linkForFileUpload.data.href,
+        timeout: 15000,
+        validateStatus: () => true,
+        headers: {
+          Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
+        },
+        data: await fsPromises.readFile(filePath),
+      }),
+    );
+
+    if (uploadFile.status !== 201) {
+      throw new Error(`Failed to upload file with status ${uploadFile.status}`);
+    }
   }
 }

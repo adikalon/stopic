@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Logger,
   Post,
   UploadedFile,
   UseGuards,
@@ -26,6 +27,8 @@ import { YandexDiskService } from '../../common/services/yandex-disk.service';
 
 @Controller('picture')
 export class PictureController {
+  private readonly logger = new Logger(PictureController.name);
+
   constructor(
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -118,9 +121,19 @@ export class PictureController {
         await fsPromises.copyFile(pbp, `${storagePath}/big.webp`);
         await this.yandexDiskService.upload(subFolder, archivePath);
       } catch (err) {
-        // TODO: Remove storagePath and write log if error
+        try {
+          await fsPromises.rm(storagePath, { recursive: true });
+        } catch (e) {
+          this.logger.error(`Delete folder failed: ${storagePath}`);
+        }
+
         throw err;
       }
+
+      await fsPromises.unlink(imagePath);
+      await fsPromises.unlink(psp);
+      await fsPromises.unlink(pbp);
+      await fsPromises.unlink(archivePath);
     });
 
     return body;
