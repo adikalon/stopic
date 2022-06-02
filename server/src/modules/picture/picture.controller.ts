@@ -24,6 +24,7 @@ import ShortUniqueId from 'short-unique-id';
 import { TagRepository } from '../tag/tag.repository';
 import * as fsPromises from 'fs/promises';
 import { YandexDiskService } from '../../common/services/yandex-disk.service';
+import { CatCutService } from '../../common/services/cat-cut.service';
 
 @Controller('picture')
 export class PictureController {
@@ -33,6 +34,7 @@ export class PictureController {
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
     private readonly yandexDiskService: YandexDiskService,
+    private readonly catCutService: CatCutService,
   ) {}
 
   @Post('/')
@@ -72,6 +74,7 @@ export class PictureController {
 
       // TODO: Uplod to CatCat
       // TODO: Log CatCat link
+      await this.catCutService.shorten('link', 'comment');
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
