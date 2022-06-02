@@ -8,6 +8,7 @@ import {
   DeleteDateColumn,
   Index,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { bigint } from '../../common/functions/entity';
 import { TrashType } from './trash-type.entity';
@@ -31,8 +32,12 @@ export class Trash {
   @DeleteDateColumn()
   deletedDate!: Date;
 
+  @Column()
+  typeId!: number;
+
   @ManyToOne(() => TrashType, (trashType) => trashType.trash, {
     nullable: false,
   })
+  @JoinColumn({ name: 'typeId', referencedColumnName: 'id' })
   type!: TrashType;
 }
