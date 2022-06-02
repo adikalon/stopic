@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MetadataInterface } from './interfaces/metadata.inteface';
+import ShortUniqueId from 'short-unique-id';
 import * as sharp from 'sharp';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -8,6 +9,29 @@ import { ArchivateInterface } from './interfaces/archivate.interface';
 
 @Injectable()
 export class PictureService {
+  async makePreview(
+    imagePath: string,
+    maxSize: number,
+    watermark: boolean,
+  ): Promise<string> {
+    const uid = new ShortUniqueId({
+      length: 15,
+      dictionary: 'alphanum_lower',
+    });
+
+    const donePath = path.join(__dirname, '/../../../temp/', `${uid()}.webp`);
+    let img = sharp(imagePath).resize(maxSize, maxSize, { fit: 'inside' });
+
+    if (watermark) {
+      const wmPath = path.join(__dirname, '/../../../assets/watermark.png');
+      img = img.composite([{ input: wmPath, gravity: 'centre', tile: true }]);
+    }
+
+    await img.webp().toFile(donePath);
+
+    return donePath;
+  }
+
   async getMetadata(imagePath: string): Promise<MetadataInterface> {
     const metadata = await sharp(imagePath).metadata();
 

@@ -21,6 +21,9 @@ import * as path from 'path';
 import * as moment from 'moment';
 import ShortUniqueId from 'short-unique-id';
 import { TagRepository } from '../tag/tag.repository';
+import * as fsPromises from 'fs/promises';
+import { TrashRepository } from '../trash/trash.repository';
+import { TrashTypeEnum } from '../trash/trash-type.enum';
 
 @Controller('picture')
 export class PictureController {
@@ -48,6 +51,7 @@ export class PictureController {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const mimeRepository = manager.getCustomRepository(MimeRepository);
       const tagRepository = manager.getCustomRepository(TagRepository);
+      const trashRepository = manager.getCustomRepository(TrashRepository);
       const mimeType = image.mimetype as MimeTypeEnum;
       const mime = await mimeRepository.getMimeByString(mimeType);
       const imagePath = path.join(__dirname, '/../../../', image.path);
@@ -58,6 +62,11 @@ export class PictureController {
         dictionary: 'alphanum_lower',
       });
       const hash: string = uid();
+
+      const psp = await this.pictureService.makePreview(imagePath, 300, false);
+      const pbp = await this.pictureService.makePreview(imagePath, 800, true);
+      const pspMetadata = await this.pictureService.getMetadata(psp);
+      const pbpMetadata = await this.pictureService.getMetadata(pbp);
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
@@ -76,6 +85,10 @@ export class PictureController {
         titleAttribute: body.titleAttribute,
         descriptionPage: body.descriptionPage,
         descriptionMeta: body.descriptionMeta,
+        widthPreviewSmall: pspMetadata.width,
+        heightPreviewSmall: pspMetadata.height,
+        widthPreviewBig: pbpMetadata.width,
+        heightPreviewBig: pbpMetadata.height,
         mime: mime,
       });
 
@@ -88,6 +101,23 @@ export class PictureController {
 
       const tags = await tagRepository.getCreateTags(body.tags);
       await pictureRepository.attachTags(tags, pictureId);
+      const storagePath = path.join(
+        __dirname,
+        '/../../../storage/',
+        subFolder,
+        pictureId.toString(),
+      );
+
+      await fsPromises.mkdir(storagePath, { recursive: true });
+      await fsPromises.copyFile(psp, `${storagePath}/small.webp`);
+
+      try {
+        await fsPromises.copyFile(pbp, `${storagePath}/big.webp`);
+      } catch (err) {
+        await trashRepository.inTrash(TrashTypeEnum.Storage, storagePath);
+        throw err;
+      }
+
       console.log(archivePath);
     });
 

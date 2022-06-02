@@ -17,5 +17,9 @@ export interface CreateInterface {
   titleAttribute: string;
   descriptionPage: string;
   descriptionMeta: string;
+  widthPreviewSmall: number;
+  heightPreviewSmall: number;
+  widthPreviewBig: number;
+  heightPreviewBig: number;
   mime: Mime;
 }

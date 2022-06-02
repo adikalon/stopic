@@ -94,6 +94,22 @@ export class Picture {
   @Column({ type: 'varchar', length: 255 })
   descriptionMeta!: string;
 
+  @Index()
+  @Column({ type: 'smallint' })
+  widthPreviewSmall!: number;
+
+  @Index()
+  @Column({ type: 'smallint' })
+  heightPreviewSmall!: number;
+
+  @Index()
+  @Column({ type: 'smallint' })
+  widthPreviewBig!: number;
+
+  @Index()
+  @Column({ type: 'smallint' })
+  heightPreviewBig!: number;
+
   @Column()
   mimeId!: number;
 

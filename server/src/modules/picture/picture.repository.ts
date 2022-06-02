@@ -6,7 +6,7 @@ import { Picture } from './picture.entity';
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
   async createAndGetResult(data: CreateInterface): Promise<InsertResult> {
-    return this.createQueryBuilder()
+    return await this.createQueryBuilder()
       .insert()
       .values({
         active: data.active,
@@ -25,6 +25,10 @@ export class PictureRepository extends Repository<Picture> {
         titleAttribute: data.titleAttribute,
         descriptionPage: data.descriptionPage,
         descriptionMeta: data.descriptionMeta,
+        widthPreviewSmall: data.widthPreviewSmall,
+        heightPreviewSmall: data.heightPreviewSmall,
+        widthPreviewBig: data.widthPreviewBig,
+        heightPreviewBig: data.heightPreviewBig,
         mimeId: data.mime.id,
       })
       .returning('*')
