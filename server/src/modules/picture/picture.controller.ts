@@ -22,14 +22,14 @@ import * as moment from 'moment';
 import ShortUniqueId from 'short-unique-id';
 import { TagRepository } from '../tag/tag.repository';
 import * as fsPromises from 'fs/promises';
-import { TrashRepository } from '../trash/trash.repository';
-import { TrashTypeEnum } from '../trash/trash-type.enum';
+import { YandexDiskService } from '../../common/services/yandex-disk.service';
 
 @Controller('picture')
 export class PictureController {
   constructor(
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
+    private readonly yandexDiskService: YandexDiskService,
   ) {}
 
   @Post('/')
@@ -51,7 +51,6 @@ export class PictureController {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const mimeRepository = manager.getCustomRepository(MimeRepository);
       const tagRepository = manager.getCustomRepository(TagRepository);
-      const trashRepository = manager.getCustomRepository(TrashRepository);
       const mimeType = image.mimetype as MimeTypeEnum;
       const mime = await mimeRepository.getMimeByString(mimeType);
       const imagePath = path.join(__dirname, '/../../../', image.path);
@@ -67,6 +66,9 @@ export class PictureController {
       const pbp = await this.pictureService.makePreview(imagePath, 800, true);
       const pspMetadata = await this.pictureService.getMetadata(psp);
       const pbpMetadata = await this.pictureService.getMetadata(pbp);
+
+      // TODO: Uplod to CatCat
+      // TODO: Log CatCat link
 
       const result = await pictureRepository.createAndGetResult({
         active: false,
@@ -110,16 +112,15 @@ export class PictureController {
       );
 
       await fsPromises.mkdir(storagePath, { recursive: true });
-      await fsPromises.copyFile(psp, `${storagePath}/small.webp`);
 
       try {
+        await fsPromises.copyFile(psp, `${storagePath}/small.webp`);
         await fsPromises.copyFile(pbp, `${storagePath}/big.webp`);
+        await this.yandexDiskService.upload(subFolder, archivePath);
       } catch (err) {
-        await trashRepository.inTrash(TrashTypeEnum.Storage, storagePath);
+        // TODO: Remove storagePath and write log if error
         throw err;
       }
-
-      console.log(archivePath);
     });
 
     return body;
