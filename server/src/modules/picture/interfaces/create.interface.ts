@@ -6,7 +6,7 @@ export interface CreateInterface {
   height: number;
   size: number;
   link: string;
-  hash: string;
+  token: string;
   url: string;
   subFolder: string;
   header: string;

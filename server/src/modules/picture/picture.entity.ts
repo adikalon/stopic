@@ -48,7 +48,7 @@ export class Picture {
 
   @Index()
   @Column({ type: 'varchar', length: 255, unique: true })
-  hash!: string;
+  token!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })

@@ -63,7 +63,7 @@ export class PictureController {
         length: 50,
         dictionary: 'alphanum_lower',
       });
-      const hash: string = uid();
+      const token: string = uid();
 
       const psp = await this.pictureService.makePreview(imagePath, 300, false);
       const pbp = await this.pictureService.makePreview(imagePath, 800, true);
@@ -79,7 +79,7 @@ export class PictureController {
         height: metadata.height,
         size: image.size,
         link: uid(), // TODO: Link from CatCut
-        hash: hash,
+        token: token,
         url: body.url,
         subFolder: subFolder,
         header: body.header,
