@@ -73,6 +73,7 @@ export class PictureController {
         width: metadata.width,
         height: metadata.height,
         size: image.size,
+        link: uid(), // TODO: Link from CatCut
         hash: hash,
         url: body.url,
         subFolder: subFolder,
