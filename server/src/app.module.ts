@@ -19,7 +19,6 @@ import { RegisterVisitorMiddleware } from './common/middlewares/register-visitor
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { BannedGuard } from './common/guards/banned.guard';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TrashModule } from './modules/trash/trash.module';
 import TypeORMConfig from './ormconfig';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { AppService } from './app.service';
@@ -56,7 +55,6 @@ import { AppService } from './app.service';
     BannedModule,
     ViewModule,
     DownloadModule,
-    TrashModule,
   ],
   controllers: [],
   providers: [

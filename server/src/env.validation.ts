@@ -21,6 +21,9 @@ export class EnvironmentVariables {
 
   @IsString()
   ADMIN_TOKEN!: string;
+
+  @IsString()
+  YANDEX_DISK_KEY!: string;
 }
 
 export function validate(config: Record<string, unknown>) {
