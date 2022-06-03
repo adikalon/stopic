@@ -41,7 +41,7 @@ export class CatCutService {
       }),
     );
 
-    const shortenLink = createLink.toString().trim();
+    const shortenLink = createLink.data.toString().trim();
 
     if (
       !shortenLink.trim() ||
