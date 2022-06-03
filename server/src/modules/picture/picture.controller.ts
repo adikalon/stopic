@@ -67,8 +67,10 @@ export class PictureController {
       });
       const token: string = uid();
 
+      const ptp = await this.pictureService.makePreview(imagePath, 150, false);
       const psp = await this.pictureService.makePreview(imagePath, 300, false);
       const pbp = await this.pictureService.makePreview(imagePath, 800, true);
+      const ptpMetadata = await this.pictureService.getMetadata(ptp);
       const pspMetadata = await this.pictureService.getMetadata(psp);
       const pbpMetadata = await this.pictureService.getMetadata(pbp);
 
@@ -77,7 +79,7 @@ export class PictureController {
       await this.catCutService.shorten('link', 'comment');
 
       const result = await pictureRepository.createAndGetResult({
-        active: false,
+        active: body.active,
         width: metadata.width,
         height: metadata.height,
         size: image.size,
@@ -94,6 +96,8 @@ export class PictureController {
         titleAttribute: body.titleAttribute,
         descriptionPage: body.descriptionPage,
         descriptionMeta: body.descriptionMeta,
+        widthPreviewTiny: ptpMetadata.width,
+        heightPreviewTiny: ptpMetadata.height,
         widthPreviewSmall: pspMetadata.width,
         heightPreviewSmall: pspMetadata.height,
         widthPreviewBig: pbpMetadata.width,
@@ -120,6 +124,7 @@ export class PictureController {
       await fsPromises.mkdir(storagePath, { recursive: true });
 
       try {
+        await fsPromises.copyFile(ptp, `${storagePath}/tiny.webp`);
         await fsPromises.copyFile(psp, `${storagePath}/small.webp`);
         await fsPromises.copyFile(pbp, `${storagePath}/big.webp`);
         await this.yandexDiskService.upload(subFolder, archivePath);
@@ -134,6 +139,7 @@ export class PictureController {
       }
 
       await fsPromises.unlink(imagePath);
+      await fsPromises.unlink(ptp);
       await fsPromises.unlink(psp);
       await fsPromises.unlink(pbp);
       await fsPromises.unlink(archivePath);

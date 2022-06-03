@@ -96,6 +96,14 @@ export class Picture {
 
   @Index()
   @Column({ type: 'smallint' })
+  widthPreviewTiny!: number;
+
+  @Index()
+  @Column({ type: 'smallint' })
+  heightPreviewTiny!: number;
+
+  @Index()
+  @Column({ type: 'smallint' })
   widthPreviewSmall!: number;
 
   @Index()

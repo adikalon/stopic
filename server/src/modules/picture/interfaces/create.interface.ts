@@ -18,6 +18,8 @@ export interface CreateInterface {
   titleAttribute: string;
   descriptionPage: string;
   descriptionMeta: string;
+  widthPreviewTiny: number;
+  heightPreviewTiny: number;
   widthPreviewSmall: number;
   heightPreviewSmall: number;
   widthPreviewBig: number;

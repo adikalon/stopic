@@ -26,6 +26,8 @@ export class PictureRepository extends Repository<Picture> {
         titleAttribute: data.titleAttribute,
         descriptionPage: data.descriptionPage,
         descriptionMeta: data.descriptionMeta,
+        widthPreviewTiny: data.widthPreviewTiny,
+        heightPreviewTiny: data.heightPreviewTiny,
         widthPreviewSmall: data.widthPreviewSmall,
         heightPreviewSmall: data.heightPreviewSmall,
         widthPreviewBig: data.widthPreviewBig,
