@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, IsString, validateSync } from 'class-validator';
+import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
 
 export enum Environment {
   Development = 'development',
@@ -24,6 +24,12 @@ export class EnvironmentVariables {
 
   @IsString()
   YANDEX_DISK_KEY!: string;
+
+  @IsNumber()
+  CATCUT_APP_ID!: number;
+
+  @IsString()
+  CATCUT_APP_SECRET!: string;
 }
 
 export function validate(config: Record<string, unknown>) {

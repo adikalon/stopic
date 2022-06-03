@@ -73,17 +73,15 @@ export class PictureController {
       const ptpMetadata = await this.pictureService.getMetadata(ptp);
       const pspMetadata = await this.pictureService.getMetadata(psp);
       const pbpMetadata = await this.pictureService.getMetadata(pbp);
-
-      // TODO: Uplod to CatCat
-      // TODO: Log CatCat link
-      await this.catCutService.shorten('link', 'comment');
+      const ccLink = await this.catCutService.shorten('http://d.loc', 'stopic'); // TODO: Create real download link
+      this.logger.log(`CatCut link created: ${ccLink}`);
 
       const result = await pictureRepository.createAndGetResult({
         active: body.active,
         width: metadata.width,
         height: metadata.height,
         size: image.size,
-        link: uid(), // TODO: Link from CatCut
+        link: ccLink,
         token: token,
         url: body.url,
         subFolder: subFolder,
