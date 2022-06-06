@@ -4,5 +4,6 @@ import { TagRepository } from './tag.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TagRepository])],
+  exports: [TypeOrmModule],
 })
 export class TagModule {}

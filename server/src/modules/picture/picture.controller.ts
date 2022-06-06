@@ -5,6 +5,7 @@ import {
   Logger,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Res,
   StreamableFile,
@@ -33,6 +34,7 @@ import { CatCutService } from '../../common/services/cat-cut.service';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../env.validation';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EditDto } from './dto/edit.dto';
 
 @Controller('picture')
 export class PictureController {
@@ -41,6 +43,8 @@ export class PictureController {
   constructor(
     @InjectRepository(PictureRepository)
     private readonly pictureRepository: PictureRepository,
+    @InjectRepository(TagRepository)
+    private readonly tagRepository: TagRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -161,6 +165,25 @@ export class PictureController {
         `${this.configService.get('APP_URL')}/api/picture/${pictureId}`,
       );
     });
+  }
+
+  @Patch('/:id')
+  @UseGuards(AdminGuard)
+  async edit(@Param('id') id: number, @Body() body: EditDto) {
+    const picture = await this.pictureRepository.getById(id);
+
+    if (!picture) {
+      throw new NotFoundException('Image not found');
+    }
+
+    await this.pictureRepository.edit(picture, body);
+
+    if (body.tags) {
+      const tags = await this.tagRepository.getCreateTags(body.tags);
+      await this.pictureRepository.attachTags(tags, picture.id);
+    }
+
+    return body;
   }
 
   @Get('/:id/preview/:image')
