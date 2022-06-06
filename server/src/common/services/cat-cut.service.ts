@@ -44,6 +44,7 @@ export class CatCutService {
     const shortenLink = createLink.data.toString().trim();
 
     if (
+      createLink.status !== 200 ||
       !shortenLink ||
       shortenLink === '0' ||
       shortenLink.indexOf('error') !== -1
