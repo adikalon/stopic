@@ -6,9 +6,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as JSZip from 'jszip';
 import { ArchivateInterface } from './interfaces/archivate.interface';
+import { MimeService } from '../mime/mime.service';
 
 @Injectable()
 export class PictureService {
+  constructor(private readonly mimeService: MimeService) {}
+
   async makePreview(
     imagePath: string,
     maxSize: number,
@@ -46,7 +49,7 @@ export class PictureService {
   }
 
   async archivate(data: ArchivateInterface): Promise<string> {
-    const ext = data.mimeType.replace(/^.+\//, '');
+    const ext = await this.mimeService.getExtByMime(data.mimeType);
     const archivePath = path.join(
       __dirname,
       '/../../../temp/',

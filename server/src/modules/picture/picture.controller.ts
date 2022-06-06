@@ -53,7 +53,7 @@ export class PictureController {
     }),
   )
   async upload(
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @UploadedFile() image: Express.Multer.File,
     @Body() body: UploadDto,
   ): Promise<void> {
@@ -154,7 +154,5 @@ export class PictureController {
         `${this.configService.get('APP_URL')}/api/picture/${pictureId}`,
       );
     });
-
-    res.send();
   }
 }

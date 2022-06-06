@@ -44,4 +44,12 @@ export class PictureRepository extends Repository<Picture> {
       .of(pictureId)
       .add(tags);
   }
+
+  async getByToken(token: string): Promise<Picture | undefined> {
+    return await this.createQueryBuilder('picture')
+      .where('picture.token = :token', { token })
+      .andWhere('picture.active = :active', { active: true })
+      .leftJoinAndSelect('picture.mime', 'mime')
+      .getOne();
+  }
 }

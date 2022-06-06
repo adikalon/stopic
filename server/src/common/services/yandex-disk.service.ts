@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import * as path from 'path';
 import * as fsPromises from 'fs/promises';
+import * as fs from 'fs';
 import { EnvironmentVariables } from '../../env.validation';
 
 @Injectable()
@@ -48,6 +49,10 @@ export class YandexDiskService {
       throw new Error(linkForFileUpload.data.description);
     }
 
+    if (linkForFileUpload.data.templated) {
+      throw new Error('Templated href');
+    }
+
     const uploadFile = await lastValueFrom(
       this.httpService.request({
         method: 'PUT',
@@ -64,5 +69,61 @@ export class YandexDiskService {
     if (uploadFile.status !== 201) {
       throw new Error(`Failed to upload file with status ${uploadFile.status}`);
     }
+  }
+
+  async download(diskPath: string, downloadPath: string): Promise<void> {
+    const downloadlink = await lastValueFrom(
+      this.httpService.request({
+        method: 'GET',
+        url: 'https://cloud-api.yandex.net/v1/disk/resources/download',
+        params: { path: diskPath },
+        timeout: 15000,
+        validateStatus: () => true,
+        headers: {
+          Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
+        },
+      }),
+    );
+
+    if (downloadlink.status !== 200) {
+      throw new Error(downloadlink.data.description);
+    }
+
+    if (downloadlink.data.templated) {
+      throw new Error('Templated href');
+    }
+
+    const downloading = await lastValueFrom(
+      this.httpService.request({
+        method: 'GET',
+        url: downloadlink.data.href,
+        timeout: 15000,
+        responseType: 'stream',
+        validateStatus: () => true,
+      }),
+    );
+
+    if (downloading.status !== 200) {
+      throw new Error(downloading.data);
+    }
+
+    const writer = fs.createWriteStream(downloadPath);
+    let error: Error;
+
+    await new Promise((resolve, reject) => {
+      downloading.data.pipe(writer);
+
+      writer.on('error', (err) => {
+        error = err;
+        writer.close();
+        reject(err);
+      });
+
+      writer.on('close', () => {
+        if (!error) {
+          resolve(true);
+        }
+      });
+    });
   }
 }
