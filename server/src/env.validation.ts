@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
 
 export enum Environment {
@@ -24,6 +24,10 @@ export class EnvironmentVariables {
 
   @IsString()
   YANDEX_DISK_KEY!: string;
+
+  @IsString()
+  @Transform(({ value }) => value.replace(/\/$/, ''))
+  CATCUT_DOMAIN!: string;
 
   @IsNumber()
   CATCUT_APP_ID!: number;
