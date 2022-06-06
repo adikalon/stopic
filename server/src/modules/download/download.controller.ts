@@ -3,6 +3,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  Req,
   Res,
   StreamableFile,
 } from '@nestjs/common';
@@ -15,10 +16,14 @@ import * as path from 'path';
 import * as fsPromises from 'fs/promises';
 import { MimeService } from '../mime/mime.service';
 import { Response } from 'express';
+import { DownloadRepository } from './download.repository';
+import { VisitorRequest } from '../visitor/visitor-request.interface';
 
 @Controller('download')
 export class DownloadController {
   constructor(
+    @InjectRepository(DownloadRepository)
+    private readonly downloadRepository: DownloadRepository,
     @InjectRepository(PictureRepository)
     private readonly pictureRepository: PictureRepository,
     private readonly downloadService: DownloadService,
@@ -29,6 +34,7 @@ export class DownloadController {
   @Get('/:token')
   @RequestTimeout(15000)
   async download(
+    @Req() req: VisitorRequest,
     @Res({ passthrough: true }) res: Response,
     @Param('token') token: string,
   ): Promise<StreamableFile> {
@@ -50,6 +56,7 @@ export class DownloadController {
     const imageContent = await fsPromises.readFile(imagePath);
     await fsPromises.unlink(arcPath);
     await fsPromises.unlink(imagePath);
+    await this.downloadRepository.increase(req.visitor, picture);
 
     return new StreamableFile(imageContent);
   }
