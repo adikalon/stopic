@@ -44,11 +44,11 @@ export class CatCutService {
     const shortenLink = createLink.data.toString().trim();
 
     if (
-      !shortenLink.trim() ||
+      !shortenLink ||
       shortenLink === '0' ||
       shortenLink.indexOf('error') !== -1
     ) {
-      throw new Error('Shorten link failed');
+      throw new Error(`Shorten link failed. Response: ${shortenLink}`);
     }
 
     return `http://ccl1.xyz/${shortenLink}`;
