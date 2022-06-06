@@ -52,4 +52,12 @@ export class PictureRepository extends Repository<Picture> {
       .leftJoinAndSelect('picture.mime', 'mime')
       .getOne();
   }
+
+  async getById(id: number): Promise<Picture | undefined> {
+    return await this.createQueryBuilder('picture')
+      .where('picture.id = :id', { id })
+      .andWhere('picture.active = :active', { active: true })
+      .leftJoinAndSelect('picture.mime', 'mime')
+      .getOne();
+  }
 }

@@ -1,9 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   Logger,
+  NotFoundException,
+  Param,
   Post,
   Res,
+  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -28,12 +32,15 @@ import { YandexDiskService } from '../../common/services/yandex-disk.service';
 import { CatCutService } from '../../common/services/cat-cut.service';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../env.validation';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('picture')
 export class PictureController {
   private readonly logger = new Logger(PictureController.name);
 
   constructor(
+    @InjectRepository(PictureRepository)
+    private readonly pictureRepository: PictureRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -154,5 +161,31 @@ export class PictureController {
         `${this.configService.get('APP_URL')}/api/picture/${pictureId}`,
       );
     });
+  }
+
+  @Get('/:id/preview/:image')
+  async preview(
+    @Res({ passthrough: true }) res: Response,
+    @Param('id') id: number,
+    @Param('image') image: string,
+  ): Promise<StreamableFile> {
+    const picture = await this.pictureRepository.getById(id);
+
+    if (!picture) {
+      throw new NotFoundException('Image not found');
+    }
+
+    const imagePath = path.join(
+      __dirname,
+      '/../../../storage/',
+      picture.subFolder,
+      picture.id.toString(),
+      image,
+    );
+
+    res.set('Content-Type', 'image/webp');
+    const imageContent = await fsPromises.readFile(imagePath);
+
+    return new StreamableFile(imageContent);
   }
 }
