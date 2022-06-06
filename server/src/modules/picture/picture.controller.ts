@@ -3,13 +3,14 @@ import {
   Controller,
   Logger,
   Post,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminGuard } from '../../common/guards/admin.guard';
-import { Express } from 'express';
+import { Express, Response } from 'express';
 import { uploadFilter } from './upload-filter';
 import { UploadDto } from './dto/upload.dto';
 import { RequestTimeout } from '../../common/interceptors/timeout.interceptor';
@@ -25,12 +26,15 @@ import { TagRepository } from '../tag/tag.repository';
 import * as fsPromises from 'fs/promises';
 import { YandexDiskService } from '../../common/services/yandex-disk.service';
 import { CatCutService } from '../../common/services/cat-cut.service';
+import { ConfigService } from '@nestjs/config';
+import { EnvironmentVariables } from '../../env.validation';
 
 @Controller('picture')
 export class PictureController {
   private readonly logger = new Logger(PictureController.name);
 
   constructor(
+    private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
     private readonly yandexDiskService: YandexDiskService,
@@ -49,9 +53,10 @@ export class PictureController {
     }),
   )
   async upload(
+    @Res() res: Response,
     @UploadedFile() image: Express.Multer.File,
     @Body() body: UploadDto,
-  ) {
+  ): Promise<void> {
     await this.connection.transaction(async (manager) => {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const mimeRepository = manager.getCustomRepository(MimeRepository);
@@ -66,14 +71,16 @@ export class PictureController {
         dictionary: 'alphanum_lower',
       });
       const token: string = uid();
-
       const ptp = await this.pictureService.makePreview(imagePath, 150, false);
       const psp = await this.pictureService.makePreview(imagePath, 300, false);
       const pbp = await this.pictureService.makePreview(imagePath, 800, true);
       const ptpMetadata = await this.pictureService.getMetadata(ptp);
       const pspMetadata = await this.pictureService.getMetadata(psp);
       const pbpMetadata = await this.pictureService.getMetadata(pbp);
-      const ccLink = await this.catCutService.shorten('http://d.loc', 'stopic'); // TODO: Create real download link
+      const ccLink = await this.catCutService.shorten(
+        `${this.configService.get('APP_URL')}/api/download/${token}`,
+        this.configService.get('APP_NAME'),
+      );
       this.logger.log(`CatCut link created: ${ccLink}`);
 
       const result = await pictureRepository.createAndGetResult({
@@ -141,8 +148,13 @@ export class PictureController {
       await fsPromises.unlink(psp);
       await fsPromises.unlink(pbp);
       await fsPromises.unlink(archivePath);
+
+      res.set(
+        'Location',
+        `${this.configService.get('APP_URL')}/api/picture/${pictureId}`,
+      );
     });
 
-    return body;
+    res.send();
   }
 }

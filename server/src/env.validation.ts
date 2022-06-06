@@ -7,6 +7,13 @@ export enum Environment {
 }
 
 export class EnvironmentVariables {
+  @IsString()
+  @Transform(({ value }) => value.replace(/\/$/, ''))
+  APP_URL!: string;
+
+  @IsString()
+  APP_NAME!: string;
+
   @IsEnum(Environment)
   NODE_ENV!: Environment;
 
