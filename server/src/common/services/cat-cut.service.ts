@@ -51,6 +51,6 @@ export class CatCutService {
       throw new Error(`Shorten link failed. Response: ${shortenLink}`);
     }
 
-    return `${this.configService.get('CATCUT_DOMAIN')}/${shortenLink}`;
+    return `${this.configService.get('CATCUT_URL')}/${shortenLink}`;
   }
 }

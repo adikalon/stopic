@@ -27,7 +27,7 @@ export class EnvironmentVariables {
 
   @IsString()
   @Transform(({ value }) => value.replace(/\/$/, ''))
-  CATCUT_DOMAIN!: string;
+  CATCUT_URL!: string;
 
   @IsNumber()
   CATCUT_APP_ID!: number;
