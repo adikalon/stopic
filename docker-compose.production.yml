@@ -48,7 +48,6 @@ services:
       - .env
     restart: ${RESTART}
     volumes:
-      - ./server/src:/home/node/app/src
       - temp:/home/node/app/temp
       - storage:/home/node/app/storage
 
