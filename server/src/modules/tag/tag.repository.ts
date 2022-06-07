@@ -35,7 +35,11 @@ export class TagRepository extends Repository<Tag> {
     return prepTags;
   }
 
-  async del(id: number): Promise<void> {
+  async hide(id: number): Promise<void> {
     await this.createQueryBuilder().softDelete().where({ id }).execute();
+  }
+
+  async show(id: number): Promise<void> {
+    await this.createQueryBuilder().restore().where({ id }).execute();
   }
 }
