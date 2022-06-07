@@ -3,36 +3,32 @@ import { Tag } from './tag.entity';
 
 @EntityRepository(Tag)
 export class TagRepository extends Repository<Tag> {
-  async getCreateTags(tags: string[]): Promise<Tag[]> {
-    const prepTags: Tag[] = [];
+  async getCreateTags(tags: string[]): Promise<number[]> {
+    const prepTags: number[] = [];
 
     for (const tag of tags) {
-      let tagEntity = await this.createQueryBuilder('tag')
+      const entity = await this.createQueryBuilder('tag')
         .where('tag.name = :name', { name: tag })
         .getOne();
 
-      if (tagEntity) {
+      if (entity) {
+        prepTags.push(entity.id);
+
         await this.createQueryBuilder()
           .update()
           .set({ updatedDate: () => 'NOW()' })
-          .where('id = :id', { id: tagEntity.id })
+          .where('id = :id', { id: entity.id })
           .execute();
       } else {
-        await this.createQueryBuilder()
+        const result = await this.createQueryBuilder()
           .insert()
           .values({ name: tag })
+          .returning(['id'])
           .execute();
 
-        tagEntity = await this.createQueryBuilder('tag')
-          .where('tag.name = :name', { name: tag })
-          .getOne();
-
-        if (!tagEntity) {
-          throw new Error('Tag not found');
-        }
+        const { id } = result.generatedMaps[0] as { id: string };
+        prepTags.push(+id);
       }
-
-      prepTags.push(tagEntity);
     }
 
     return prepTags;

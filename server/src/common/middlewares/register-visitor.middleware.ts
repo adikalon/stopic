@@ -1,40 +1,38 @@
 import {
   Injectable,
-  InternalServerErrorException,
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Response, NextFunction } from 'express';
 import { VisitorRequest } from '../../modules/visitor/visitor-request.interface';
-import { VisitorService } from '../../modules/visitor/visitor.service';
+import { VisitorRepository } from '../../modules/visitor/visitor.repository';
 
 @Injectable()
 export class RegisterVisitorMiddleware implements NestMiddleware {
-  constructor(private readonly visitorService: VisitorService) {}
+  constructor(
+    @InjectRepository(VisitorRepository)
+    private readonly visitorRepository: VisitorRepository,
+  ) {}
 
   async use(req: VisitorRequest, _res: Response, next: NextFunction) {
     const ip = req.clientIp;
-    const userAgent = req.header('user-agent');
+    const ua = req.header('user-agent');
 
     if (!ip) {
       throw new UnauthorizedException('Client IP not found');
     }
 
-    if (!userAgent) {
+    if (!ua) {
       throw new UnauthorizedException('User-Agent not found');
     }
 
-    let visitor = await this.visitorService.getVisitor(ip, userAgent);
+    let visitor = await this.visitorRepository.getByIpAndUserAgent(ip, ua);
 
     if (visitor) {
-      await this.visitorService.touchVisitor(visitor.id);
+      await this.visitorRepository.touchById(visitor.id);
     } else {
-      await this.visitorService.registerVisitor(ip, userAgent);
-      visitor = await this.visitorService.getVisitor(ip, userAgent);
-
-      if (!visitor) {
-        throw new InternalServerErrorException('Visitor is not in the DB');
-      }
+      visitor = await this.visitorRepository.registerAndGet(ip, ua);
     }
 
     req.visitor = visitor;

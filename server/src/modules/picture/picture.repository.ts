@@ -1,18 +1,13 @@
-import {
-  EntityRepository,
-  InsertResult,
-  Repository,
-  UpdateResult,
-} from 'typeorm';
-import { Tag } from '../tag/tag.entity';
+import { EntityRepository, Repository } from 'typeorm';
+import { PictureDataDto } from './dto/picture-data.dto';
 import { CreateInterface } from './interfaces/create.interface';
 import { EditInterface } from './interfaces/edit.interface';
 import { Picture } from './picture.entity';
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
-  async createAndGetResult(data: CreateInterface): Promise<InsertResult> {
-    return await this.createQueryBuilder()
+  async createAndGetId(data: CreateInterface): Promise<number> {
+    const result = await this.createQueryBuilder()
       .insert()
       .values({
         active: data.active,
@@ -38,38 +33,70 @@ export class PictureRepository extends Repository<Picture> {
         heightPreviewSmall: data.heightPreviewSmall,
         widthPreviewBig: data.widthPreviewBig,
         heightPreviewBig: data.heightPreviewBig,
-        mimeId: data.mime.id,
+        mimeId: data.mimeId,
       })
-      .returning('*')
+      .returning(['id'])
       .execute();
+
+    const { id } = result.generatedMaps[0] as { id: string };
+
+    return +id;
   }
 
-  async attachTags(tags: Tag[], pictureId: number): Promise<void> {
+  async attachTags(
+    pictureId: number,
+    attached: number[],
+    detached: number[] = [],
+  ): Promise<void> {
     await this.createQueryBuilder()
       .relation(Picture, 'tags')
       .of(pictureId)
-      .addAndRemove(tags, tags);
+      .addAndRemove(attached, detached);
   }
 
-  async getByToken(token: string): Promise<Picture | undefined> {
-    return await this.createQueryBuilder('picture')
+  async getByToken(token: string): Promise<PictureDataDto | undefined> {
+    const entity = await this.createQueryBuilder('picture')
       .where('picture.token = :token', { token })
       .leftJoinAndSelect('picture.mime', 'mime')
+      .leftJoinAndSelect('picture.tags', 'tags')
       .getOne();
+
+    if (!entity) {
+      return undefined;
+    }
+
+    return {
+      id: entity.id,
+      subFolder: entity.subFolder,
+      mime: { id: entity.mime.id, type: entity.mime.type },
+      tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+    };
   }
 
-  async getById(id: number): Promise<Picture | undefined> {
-    return await this.createQueryBuilder('picture')
+  async getById(id: number): Promise<PictureDataDto | undefined> {
+    const entity = await this.createQueryBuilder('picture')
       .where('picture.id = :id', { id })
       .leftJoinAndSelect('picture.mime', 'mime')
+      .leftJoinAndSelect('picture.tags', 'tags')
       .getOne();
+
+    if (!entity) {
+      return undefined;
+    }
+
+    return {
+      id: entity.id,
+      subFolder: entity.subFolder,
+      mime: { id: entity.mime.id, type: entity.mime.type },
+      tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+    };
   }
 
-  async edit(picture: Picture, data: EditInterface): Promise<UpdateResult> {
+  async edit(pictureId: number, data: EditInterface): Promise<void> {
     let query = this.createQueryBuilder()
       .update()
-      .where('id = :id', { id: picture.id })
-      .returning('*');
+      .where('id = :id', { id: pictureId })
+      .returning(['id']);
 
     if (data.active !== undefined) {
       query = query.set({ active: data.active });
@@ -115,6 +142,6 @@ export class PictureRepository extends Repository<Picture> {
       query = query.set({ descriptionMeta: data.descriptionMeta });
     }
 
-    return await query.execute();
+    await query.execute();
   }
 }

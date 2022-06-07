@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { Visitor } from './visitor.entity';
+import { VisitorDto } from './visitor.dto';
 
 export interface VisitorRequest extends Request {
-  visitor: Visitor;
+  visitor: VisitorDto;
 }

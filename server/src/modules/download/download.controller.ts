@@ -45,10 +45,10 @@ export class DownloadController {
     }
 
     const ext = await this.mimeService.getExtByMime(picture.mime.type);
-    const imageName = `${picture.token}.${ext}`;
+    const imageName = `${token}.${ext}`;
     const imagePath = path.join(__dirname, `/../../../temp/${imageName}`);
     const diskPath = `${picture.subFolder}/${picture.id}.zip`;
-    const arcPath = path.join(__dirname, `/../../../temp/${picture.token}.zip`);
+    const arcPath = path.join(__dirname, `/../../../temp/${token}.zip`);
     await this.yandexDiskService.download(diskPath, arcPath);
     await this.downloadService.extract(arcPath, imagePath);
     res.set('Content-Type', picture.mime.type);
@@ -56,7 +56,7 @@ export class DownloadController {
     const imageContent = await fsPromises.readFile(imagePath);
     await fsPromises.unlink(arcPath);
     await fsPromises.unlink(imagePath);
-    await this.downloadRepository.increase(req.visitor, picture);
+    await this.downloadRepository.increase(req.visitor.id, picture.id);
 
     return new StreamableFile(imageContent);
   }

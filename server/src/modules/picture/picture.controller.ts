@@ -73,7 +73,7 @@ export class PictureController {
       const mimeRepository = manager.getCustomRepository(MimeRepository);
       const tagRepository = manager.getCustomRepository(TagRepository);
       const mimeType = image.mimetype as MimeTypeEnum;
-      const mime = await mimeRepository.getMimeByString(mimeType);
+      const mimeId = await mimeRepository.getMimeIdByString(mimeType);
       const imagePath = path.join(__dirname, '/../../../', image.path);
       const metadata = await this.pictureService.getMetadata(imagePath);
       const subFolder = moment().format('YYYY-MM-DD');
@@ -94,7 +94,7 @@ export class PictureController {
       );
       this.logger.log(`CatCut link created: ${ccLink}`);
 
-      const result = await pictureRepository.createAndGetResult({
+      const pictureId = await pictureRepository.createAndGetId({
         active: body.active,
         width: metadata.width,
         height: metadata.height,
@@ -118,10 +118,9 @@ export class PictureController {
         heightPreviewSmall: pspMetadata.height,
         widthPreviewBig: pbpMetadata.width,
         heightPreviewBig: pbpMetadata.height,
-        mime: mime,
+        mimeId: mimeId,
       });
 
-      const pictureId = +result.raw[0].id;
       const archivePath = await this.pictureService.archivate({
         imagePath: imagePath,
         mimeType: mimeType,
@@ -129,7 +128,7 @@ export class PictureController {
       });
 
       const tags = await tagRepository.getCreateTags(body.tags);
-      await pictureRepository.attachTags(tags, pictureId);
+      await pictureRepository.attachTags(pictureId, tags);
       const storagePath = path.join(
         __dirname,
         '/../../../storage/',
@@ -176,11 +175,15 @@ export class PictureController {
       throw new NotFoundException('Image not found');
     }
 
-    await this.pictureRepository.edit(picture, body);
+    await this.pictureRepository.edit(picture.id, body);
 
     if (body.tags) {
       const tags = await this.tagRepository.getCreateTags(body.tags);
-      await this.pictureRepository.attachTags(tags, picture.id);
+      await this.pictureRepository.attachTags(
+        picture.id,
+        tags,
+        picture.tags.map((tag) => tag.id),
+      );
     }
 
     return body;

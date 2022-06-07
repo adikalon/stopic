@@ -1,5 +1,3 @@
-import { Mime } from '../../mime/mime.entity';
-
 export interface CreateInterface {
   active: boolean;
   width: number;
@@ -24,5 +22,5 @@ export interface CreateInterface {
   heightPreviewSmall: number;
   widthPreviewBig: number;
   heightPreviewBig: number;
-  mime: Mime;
+  mimeId: number;
 }

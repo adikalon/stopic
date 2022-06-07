@@ -4,22 +4,23 @@ import { Mime } from './mime.entity';
 
 @EntityRepository(Mime)
 export class MimeRepository extends Repository<Mime> {
-  async getMimeByString(type: MimeTypeEnum): Promise<Mime> {
-    let mime = await this.createQueryBuilder('mime')
+  async getMimeIdByString(type: MimeTypeEnum): Promise<number> {
+    const mime = await this.createQueryBuilder('mime')
       .where('mime.type = :type', { type })
       .getOne();
 
-    if (!mime) {
-      await this.createQueryBuilder().insert().values({ type }).execute();
-      mime = await this.createQueryBuilder('mime')
-        .where('mime.type = :type', { type })
-        .getOne();
-
-      if (!mime) {
-        throw new Error('MimeType not found');
-      }
+    if (mime) {
+      return mime.id;
     }
 
-    return mime;
+    const result = await this.createQueryBuilder()
+      .insert()
+      .values({ type })
+      .returning(['id'])
+      .execute();
+
+    const { id } = result.generatedMaps[0] as { id: string };
+
+    return +id;
   }
 }

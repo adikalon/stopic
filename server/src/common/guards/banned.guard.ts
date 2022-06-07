@@ -4,19 +4,23 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { BannedService } from '../../modules/banned/banned.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BannedRepository } from '../../modules/banned/banned.repository';
 import { VisitorRequest } from '../../modules/visitor/visitor-request.interface';
 
 @Injectable()
 export class BannedGuard implements CanActivate {
-  constructor(private readonly bannedService: BannedService) {}
+  constructor(
+    @InjectRepository(BannedRepository)
+    private readonly bannedRepository: BannedRepository,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: VisitorRequest = context.switchToHttp().getRequest();
-    const banned = await this.bannedService.getVisitorBanned(req.visitor);
+    const bannedTo = await this.bannedRepository.getBannedTo(req.visitor.id);
 
-    if (banned) {
-      throw new ForbiddenException(`Access blocked to ${banned.bannedTo}`);
+    if (bannedTo) {
+      throw new ForbiddenException(`Access blocked to ${bannedTo}`);
     }
 
     return true;
