@@ -35,6 +35,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../env.validation';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EditDto } from './dto/edit.dto';
+import { PictureDataDto } from './dto/picture-data.dto';
 
 @Controller('picture')
 export class PictureController {
@@ -43,8 +44,6 @@ export class PictureController {
   constructor(
     @InjectRepository(PictureRepository)
     private readonly pictureRepository: PictureRepository,
-    @InjectRepository(TagRepository)
-    private readonly tagRepository: TagRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -176,44 +175,57 @@ export class PictureController {
 
   @Patch('/:id')
   @UseGuards(AdminGuard)
-  async edit(@Param('id') id: number, @Body() body: EditDto) {
+  async edit(
+    @Param('id') id: number,
+    @Body() body: EditDto,
+  ): Promise<PictureDataDto> {
+    await this.connection.transaction(async (manager) => {
+      const pictureRepository = manager.getCustomRepository(PictureRepository);
+      const tagRepository = manager.getCustomRepository(TagRepository);
+      const picture = await pictureRepository.getById(id);
+
+      if (!picture) {
+        throw new NotFoundException('Image not found');
+      }
+
+      await pictureRepository.edit(picture.id, {
+        link: body?.link,
+        token: body?.token,
+        url: body?.url,
+        title: body?.title,
+        description: body?.description,
+        header: body?.header,
+        content: body?.content,
+        subFolder: body?.subFolder,
+        tinyName: body?.tinyName,
+        tinyAlt: body?.tinyAlt,
+        tinyTitle: body?.tinyTitle,
+        smallName: body?.smallName,
+        smallAlt: body?.smallAlt,
+        smallTitle: body?.smallTitle,
+        bigName: body?.bigName,
+        bigAlt: body?.bigAlt,
+        bigTitle: body?.bigTitle,
+        active: body?.active,
+      });
+
+      if (body.tags) {
+        const tags = await tagRepository.getCreateTags(body.tags);
+        await pictureRepository.attachTags(
+          picture.id,
+          tags,
+          picture.tags.map((tag) => tag.id),
+        );
+      }
+    });
+
     const picture = await this.pictureRepository.getById(id);
 
     if (!picture) {
-      throw new NotFoundException('Image not found');
+      throw new NotFoundException('Picture not found');
     }
 
-    await this.pictureRepository.edit(picture.id, {
-      link: body?.link,
-      token: body?.token,
-      url: body?.url,
-      title: body?.title,
-      description: body?.description,
-      header: body?.header,
-      content: body?.content,
-      subFolder: body?.subFolder,
-      tinyName: body?.tinyName,
-      tinyAlt: body?.tinyAlt,
-      tinyTitle: body?.tinyTitle,
-      smallName: body?.smallName,
-      smallAlt: body?.smallAlt,
-      smallTitle: body?.smallTitle,
-      bigName: body?.bigName,
-      bigAlt: body?.bigAlt,
-      bigTitle: body?.bigTitle,
-      active: body?.active,
-    });
-
-    if (body.tags) {
-      const tags = await this.tagRepository.getCreateTags(body.tags);
-      await this.pictureRepository.attachTags(
-        picture.id,
-        tags,
-        picture.tags.map((tag) => tag.id),
-      );
-    }
-
-    return body;
+    return picture;
   }
 
   @Get('/:id/preview/:image')
