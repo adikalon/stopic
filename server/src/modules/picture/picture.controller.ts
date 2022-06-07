@@ -95,30 +95,34 @@ export class PictureController {
       this.logger.log(`CatCut link created: ${ccLink}`);
 
       const pictureId = await pictureRepository.createAndGetId({
-        active: body.active,
         width: metadata.width,
         height: metadata.height,
         size: image.size,
         link: ccLink,
         token: token,
         url: body.url,
-        subFolder: subFolder,
+        title: body.title,
+        description: body.description,
         header: body.header,
-        altFull: body.altFull,
-        altPreview: body.altPreview,
-        nameFull: body.nameFull,
-        namePreview: body.namePreview,
-        titleMeta: body.titleMeta,
-        titleAttribute: body.titleAttribute,
-        descriptionPage: body.descriptionPage,
-        descriptionMeta: body.descriptionMeta,
-        widthPreviewTiny: ptpMetadata.width,
-        heightPreviewTiny: ptpMetadata.height,
-        widthPreviewSmall: pspMetadata.width,
-        heightPreviewSmall: pspMetadata.height,
-        widthPreviewBig: pbpMetadata.width,
-        heightPreviewBig: pbpMetadata.height,
+        content: body.content,
+        subFolder: subFolder,
+        tinyName: body.tinyName,
+        tinyAlt: body.tinyAlt,
+        tinyTitle: body.tinyTitle,
+        tinyWidth: ptpMetadata.width,
+        tinyHeight: ptpMetadata.height,
+        smallName: body.smallName,
+        smallAlt: body.smallAlt,
+        smallTitle: body.smallTitle,
+        smallWidth: pspMetadata.width,
+        smallHeight: pspMetadata.height,
+        bigName: body.bigName,
+        bigAlt: body.bigAlt,
+        bigTitle: body.bigTitle,
+        bigWidth: pbpMetadata.width,
+        bigHeight: pbpMetadata.height,
         mimeId: mimeId,
+        active: body.active,
       });
 
       const archivePath = await this.pictureService.archivate({
@@ -175,7 +179,26 @@ export class PictureController {
       throw new NotFoundException('Image not found');
     }
 
-    await this.pictureRepository.edit(picture.id, body);
+    await this.pictureRepository.edit(picture.id, {
+      link: body?.link,
+      token: body?.token,
+      url: body?.url,
+      title: body?.title,
+      description: body?.description,
+      header: body?.header,
+      content: body?.content,
+      subFolder: body?.subFolder,
+      tinyName: body?.tinyName,
+      tinyAlt: body?.tinyAlt,
+      tinyTitle: body?.tinyTitle,
+      smallName: body?.smallName,
+      smallAlt: body?.smallAlt,
+      smallTitle: body?.smallTitle,
+      bigName: body?.bigName,
+      bigAlt: body?.bigAlt,
+      bigTitle: body?.bigTitle,
+      active: body?.active,
+    });
 
     if (body.tags) {
       const tags = await this.tagRepository.getCreateTags(body.tags);

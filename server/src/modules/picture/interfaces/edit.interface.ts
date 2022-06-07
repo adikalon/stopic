@@ -1,13 +1,20 @@
 export interface EditInterface {
-  active?: boolean;
-  url?: string;
-  header?: string;
-  altFull?: string;
-  altPreview?: string;
-  nameFull?: string;
-  namePreview?: string;
-  titleMeta?: string;
-  titleAttribute?: string;
-  descriptionPage?: string;
-  descriptionMeta?: string;
+  link?: string | undefined;
+  token?: string | undefined;
+  url?: string | undefined;
+  title?: string | undefined;
+  description?: string | undefined;
+  header?: string | undefined;
+  content?: string | undefined;
+  subFolder?: string | undefined;
+  tinyName?: string | undefined;
+  tinyAlt?: string | undefined;
+  tinyTitle?: string | undefined;
+  smallName?: string | undefined;
+  smallAlt?: string | undefined;
+  smallTitle?: string | undefined;
+  bigName?: string | undefined;
+  bigAlt?: string | undefined;
+  bigTitle?: string | undefined;
+  active?: boolean | undefined;
 }

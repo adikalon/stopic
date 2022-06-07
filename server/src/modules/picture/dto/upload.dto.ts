@@ -11,14 +11,20 @@ import {
 } from 'class-validator';
 
 export class UploadDto {
-  @IsBoolean()
-  @Transform(({ value }) => value === 'true')
-  active!: boolean;
-
   @IsString()
   @MinLength(1)
   @MaxLength(255)
   url!: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  title!: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  description!: string;
 
   @IsString()
   @MinLength(1)
@@ -28,42 +34,56 @@ export class UploadDto {
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  altFull!: string;
+  content!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  altPreview!: string;
+  tinyName!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  nameFull!: string;
+  tinyAlt!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  namePreview!: string;
+  tinyTitle!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleMeta!: string;
+  smallName!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  titleAttribute!: string;
+  smallAlt!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  descriptionPage!: string;
+  smallTitle!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(255)
-  descriptionMeta!: string;
+  bigName!: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  bigAlt!: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  bigTitle!: string;
+
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  active!: boolean;
 
   @IsArray()
   @ArrayMinSize(1)

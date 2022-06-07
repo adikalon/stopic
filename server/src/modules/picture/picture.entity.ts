@@ -27,9 +27,6 @@ export class Picture {
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
   id!: number;
 
-  @Column({ type: 'boolean' })
-  active!: boolean;
-
   @Index()
   @Column({ type: 'smallint' })
   width!: number;
@@ -56,7 +53,11 @@ export class Picture {
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  subFolder!: string;
+  title!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  description!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
@@ -64,66 +65,81 @@ export class Picture {
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  altFull!: string;
+  content!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  altPreview!: string;
+  subFolder!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  nameFull!: string;
+  tinyName!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  namePreview!: string;
+  tinyAlt!: string;
 
   @Index()
   @Column({ type: 'varchar', length: 255 })
-  titleMeta!: string;
-
-  @Index()
-  @Column({ type: 'varchar', length: 255 })
-  titleAttribute!: string;
-
-  @Index()
-  @Column({ type: 'varchar', length: 255 })
-  descriptionPage!: string;
-
-  @Index()
-  @Column({ type: 'varchar', length: 255 })
-  descriptionMeta!: string;
+  tinyTitle!: string;
 
   @Index()
   @Column({ type: 'smallint' })
-  widthPreviewTiny!: number;
+  tinyWidth!: number;
 
   @Index()
   @Column({ type: 'smallint' })
-  heightPreviewTiny!: number;
+  tinyHeight!: number;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  smallName!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  smallAlt!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  smallTitle!: string;
 
   @Index()
   @Column({ type: 'smallint' })
-  widthPreviewSmall!: number;
+  smallWidth!: number;
 
   @Index()
   @Column({ type: 'smallint' })
-  heightPreviewSmall!: number;
+  smallHeight!: number;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  bigName!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  bigAlt!: string;
+
+  @Index()
+  @Column({ type: 'varchar', length: 255 })
+  bigTitle!: string;
 
   @Index()
   @Column({ type: 'smallint' })
-  widthPreviewBig!: number;
+  bigWidth!: number;
 
   @Index()
   @Column({ type: 'smallint' })
-  heightPreviewBig!: number;
-
-  @Column()
-  mimeId!: number;
+  bigHeight!: number;
 
   @ManyToOne(() => Mime, (mime) => mime.pictures, { nullable: false })
   @JoinColumn({ name: 'mimeId', referencedColumnName: 'id' })
   mime!: Mime;
+
+  @Column()
+  mimeId!: number;
+
+  @Column({ type: 'boolean' })
+  active!: boolean;
 
   @CreateDateColumn()
   createdDate!: Date;

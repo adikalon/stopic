@@ -10,30 +10,34 @@ export class PictureRepository extends Repository<Picture> {
     const result = await this.createQueryBuilder()
       .insert()
       .values({
-        active: data.active,
         width: data.width,
         height: data.height,
         size: data.size,
         link: data.link,
         token: data.token,
         url: data.url,
-        subFolder: data.subFolder,
+        title: data.title,
+        description: data.description,
         header: data.header,
-        altFull: data.altFull,
-        altPreview: data.altPreview,
-        nameFull: data.nameFull,
-        namePreview: data.namePreview,
-        titleMeta: data.titleMeta,
-        titleAttribute: data.titleAttribute,
-        descriptionPage: data.descriptionPage,
-        descriptionMeta: data.descriptionMeta,
-        widthPreviewTiny: data.widthPreviewTiny,
-        heightPreviewTiny: data.heightPreviewTiny,
-        widthPreviewSmall: data.widthPreviewSmall,
-        heightPreviewSmall: data.heightPreviewSmall,
-        widthPreviewBig: data.widthPreviewBig,
-        heightPreviewBig: data.heightPreviewBig,
+        content: data.content,
+        subFolder: data.subFolder,
+        tinyName: data.tinyName,
+        tinyAlt: data.tinyAlt,
+        tinyTitle: data.tinyTitle,
+        tinyWidth: data.tinyWidth,
+        tinyHeight: data.tinyHeight,
+        smallName: data.smallName,
+        smallAlt: data.smallAlt,
+        smallTitle: data.smallTitle,
+        smallWidth: data.smallWidth,
+        smallHeight: data.smallHeight,
+        bigName: data.bigName,
+        bigAlt: data.bigAlt,
+        bigTitle: data.bigTitle,
+        bigWidth: data.bigWidth,
+        bigHeight: data.bigHeight,
         mimeId: data.mimeId,
+        active: data.active,
       })
       .returning(['id'])
       .execute();
@@ -93,55 +97,84 @@ export class PictureRepository extends Repository<Picture> {
   }
 
   async edit(pictureId: number, data: EditInterface): Promise<void> {
-    let query = this.createQueryBuilder()
-      .update()
-      .where('id = :id', { id: pictureId })
-      .returning(['id']);
+    const upd: any = {};
 
-    if (data.active !== undefined) {
-      query = query.set({ active: data.active });
+    if (data.link !== undefined) {
+      upd.link = data.link;
+    }
+
+    if (data.token !== undefined) {
+      upd.token = data.token;
     }
 
     if (data.url !== undefined) {
-      query = query.set({ url: data.url });
+      upd.url = data.url;
+    }
+
+    if (data.title !== undefined) {
+      upd.title = data.title;
+    }
+
+    if (data.description !== undefined) {
+      upd.description = data.description;
     }
 
     if (data.header !== undefined) {
-      query = query.set({ header: data.header });
+      upd.header = data.header;
     }
 
-    if (data.altFull !== undefined) {
-      query = query.set({ altFull: data.altFull });
+    if (data.content !== undefined) {
+      upd.content = data.content;
     }
 
-    if (data.altPreview !== undefined) {
-      query = query.set({ altPreview: data.altPreview });
+    if (data.subFolder !== undefined) {
+      upd.subFolder = data.subFolder;
     }
 
-    if (data.nameFull !== undefined) {
-      query = query.set({ nameFull: data.nameFull });
+    if (data.tinyName !== undefined) {
+      upd.tinyName = data.tinyName;
     }
 
-    if (data.namePreview !== undefined) {
-      query = query.set({ namePreview: data.namePreview });
+    if (data.tinyAlt !== undefined) {
+      upd.tinyAlt = data.tinyAlt;
     }
 
-    if (data.titleMeta !== undefined) {
-      query = query.set({ titleMeta: data.titleMeta });
+    if (data.tinyTitle !== undefined) {
+      upd.tinyTitle = data.tinyTitle;
     }
 
-    if (data.titleAttribute !== undefined) {
-      query = query.set({ titleAttribute: data.titleAttribute });
+    if (data.smallName !== undefined) {
+      upd.smallName = data.smallName;
     }
 
-    if (data.descriptionPage !== undefined) {
-      query = query.set({ descriptionPage: data.descriptionPage });
+    if (data.smallAlt !== undefined) {
+      upd.smallAlt = data.smallAlt;
     }
 
-    if (data.descriptionMeta !== undefined) {
-      query = query.set({ descriptionMeta: data.descriptionMeta });
+    if (data.smallTitle !== undefined) {
+      upd.smallTitle = data.smallTitle;
     }
 
-    await query.execute();
+    if (data.bigName !== undefined) {
+      upd.bigName = data.bigName;
+    }
+
+    if (data.bigAlt !== undefined) {
+      upd.bigAlt = data.bigAlt;
+    }
+
+    if (data.bigTitle !== undefined) {
+      upd.bigTitle = data.bigTitle;
+    }
+
+    if (data.active !== undefined) {
+      upd.active = data.active;
+    }
+
+    await this.createQueryBuilder()
+      .update()
+      .where('id = :id', { id: pictureId })
+      .set(upd)
+      .execute();
   }
 }
