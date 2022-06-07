@@ -90,7 +90,11 @@ export class PictureController {
       const pbpMetadata = await this.pictureService.getMetadata(pbp);
       const ccLink = await this.catCutService.shorten(
         `${this.configService.get('APP_URL')}/api/download/${token}`,
-        this.configService.get('APP_NAME'),
+        `| ${this.configService.get('APP_NAME')} | ${
+          body.url
+        } | ${mimeType} | ${metadata.width}x${metadata.height} | ${
+          image.size
+        } |`,
       );
       this.logger.log(`CatCut link created: ${ccLink}`);
 
