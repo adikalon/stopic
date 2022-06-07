@@ -21,7 +21,12 @@ import { View } from '../view/view.entity';
 import { Download } from '../download/download.entity';
 
 @Entity()
-@Check('"width" > 0 AND "height" > 0 AND "size" > 0')
+@Check(
+  '"width" > 0 AND "height" > 0 AND "size" > 0 AND "tinyWidth" > 0 AND "tinyHeight" > 0 AND "smallWidth" > 0 AND "smallHeight" > 0 AND "bigWidth" > 0 AND "bigHeight" > 0',
+)
+@Check(
+  '"tinyName" != "smallName" AND "tinyName" != "bigName" AND "smallName" != "bigName"',
+)
 export class Picture {
   @Generated('increment')
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
