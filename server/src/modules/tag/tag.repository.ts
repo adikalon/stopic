@@ -9,6 +9,7 @@ export class TagRepository extends Repository<Tag> {
     for (const tag of tags) {
       const entity = await this.createQueryBuilder('tag')
         .where('tag.name = :name', { name: tag })
+        .withDeleted()
         .getOne();
 
       if (entity) {
@@ -32,5 +33,9 @@ export class TagRepository extends Repository<Tag> {
     }
 
     return prepTags;
+  }
+
+  async del(id: number): Promise<void> {
+    await this.createQueryBuilder().softDelete().where({ id }).execute();
   }
 }

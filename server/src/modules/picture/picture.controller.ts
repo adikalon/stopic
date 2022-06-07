@@ -182,7 +182,7 @@ export class PictureController {
     await this.connection.transaction(async (manager) => {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const tagRepository = manager.getCustomRepository(TagRepository);
-      const picture = await pictureRepository.getById(id);
+      const picture = await pictureRepository.getByIdWithDeleted(id);
 
       if (!picture) {
         throw new NotFoundException('Image not found');

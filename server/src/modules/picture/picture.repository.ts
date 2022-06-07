@@ -102,6 +102,29 @@ export class PictureRepository extends Repository<Picture> {
     };
   }
 
+  async getByIdWithDeleted(id: number): Promise<PictureDataDto | undefined> {
+    const entity = await this.createQueryBuilder('picture')
+      .withDeleted()
+      .where('picture.id = :id', { id })
+      .leftJoinAndSelect('picture.mime', 'mime')
+      .leftJoinAndSelect('picture.tags', 'tags')
+      .getOne();
+
+    if (!entity) {
+      return undefined;
+    }
+
+    return {
+      id: entity.id,
+      subFolder: entity.subFolder,
+      tinyName: entity.tinyName,
+      smallName: entity.smallName,
+      bigName: entity.bigName,
+      mime: { id: entity.mime.id, type: entity.mime.type },
+      tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+    };
+  }
+
   async edit(pictureId: number, data: EditInterface): Promise<void> {
     const upd: any = {};
 
