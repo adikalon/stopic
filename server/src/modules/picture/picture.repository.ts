@@ -72,6 +72,9 @@ export class PictureRepository extends Repository<Picture> {
     return {
       id: entity.id,
       subFolder: entity.subFolder,
+      tinyName: entity.tinyName,
+      smallName: entity.smallName,
+      bigName: entity.bigName,
       mime: { id: entity.mime.id, type: entity.mime.type },
       tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
     };
@@ -91,6 +94,9 @@ export class PictureRepository extends Repository<Picture> {
     return {
       id: entity.id,
       subFolder: entity.subFolder,
+      tinyName: entity.tinyName,
+      smallName: entity.smallName,
+      bigName: entity.bigName,
       mime: { id: entity.mime.id, type: entity.mime.type },
       tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
     };

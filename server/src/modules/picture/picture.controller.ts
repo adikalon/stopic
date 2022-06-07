@@ -221,6 +221,19 @@ export class PictureController {
     const picture = await this.pictureRepository.getById(id);
 
     if (!picture) {
+      throw new NotFoundException('Picture not found');
+    }
+
+    const fileName = image.replace(/\.webp$/, '');
+    let file: string;
+
+    if (fileName === picture.tinyName) {
+      file = 'tiny.webp';
+    } else if (fileName === picture.smallName) {
+      file = 'small.webp';
+    } else if (fileName === picture.bigName) {
+      file = 'big.webp';
+    } else {
       throw new NotFoundException('Image not found');
     }
 
@@ -229,7 +242,7 @@ export class PictureController {
       '/../../../storage/',
       picture.subFolder,
       picture.id.toString(),
-      image,
+      file,
     );
 
     res.set('Content-Type', 'image/webp');
