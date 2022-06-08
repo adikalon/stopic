@@ -45,13 +45,15 @@ export class TagRepository extends Repository<Tag> {
   }
 
   async getPopular(limit: number): Promise<TagDataPopularDto[]> {
-    return (await this.createQueryBuilder('tag')
+    const result = (await this.createQueryBuilder('tag')
       .leftJoinAndSelect('tag.pictures', 'pictures')
       .groupBy('tag.id')
       .select(['tag.id AS id', 'tag.name AS name', 'COUNT(tag.id) as count'])
       .orderBy('count', 'DESC')
       .addOrderBy('tag.updatedDate', 'DESC')
       .limit(limit)
-      .execute()) as TagDataPopularDto[];
+      .execute()) as { id: string; name: string; count: string }[];
+
+    return result.map((r) => ({ id: +r.id, name: r.name, count: +r.count }));
   }
 }
