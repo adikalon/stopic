@@ -1,5 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { TagDataPopularDto } from './dto/tag-data-popular.dto';
+import { TagDataDto } from './dto/tag-data.dto';
+import { PaginatedInterface } from './paginated.interface';
 import { Tag } from './tag.entity';
 
 @EntityRepository(Tag)
@@ -55,5 +57,35 @@ export class TagRepository extends Repository<Tag> {
       .execute()) as { id: string; name: string; count: string }[];
 
     return result.map((r) => ({ id: +r.id, name: r.name, count: +r.count }));
+  }
+
+  async getPaginated(data: PaginatedInterface): Promise<TagDataDto[]> {
+    let query = this.createQueryBuilder('tag')
+      .offset(data.offset)
+      .limit(data.limit)
+      .orderBy('tag.name', 'ASC');
+
+    if (data.deleted) {
+      query = query.withDeleted().andWhere('tag.deletedDate IS NOT NULL');
+    }
+
+    if (data.search) {
+      query = query.andWhere('tag.name LIKE :n', { n: `%${data.search}%` });
+    }
+
+    const result = await query.getMany();
+
+    return result.map((r) => ({ id: r.id, name: r.name }));
+  }
+
+  async getCount(deleted?: boolean): Promise<number> {
+    if (deleted) {
+      return await this.createQueryBuilder('tag')
+        .withDeleted()
+        .where('tag.deletedDate IS NOT NULL')
+        .getCount();
+    }
+
+    return await this.createQueryBuilder('tag').getCount();
   }
 }
