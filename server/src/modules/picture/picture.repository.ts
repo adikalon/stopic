@@ -80,35 +80,17 @@ export class PictureRepository extends Repository<Picture> {
     };
   }
 
-  async getById(id: number): Promise<PictureDataDto | undefined> {
-    const entity = await this.createQueryBuilder('picture')
+  async getById(id: number, del = false): Promise<PictureDataDto | undefined> {
+    let query = this.createQueryBuilder('picture')
       .where('picture.id = :id', { id })
       .leftJoinAndSelect('picture.mime', 'mime')
-      .leftJoinAndSelect('picture.tags', 'tags')
-      .getOne();
+      .leftJoinAndSelect('picture.tags', 'tags');
 
-    if (!entity) {
-      return undefined;
+    if (del) {
+      query = query.withDeleted();
     }
 
-    return {
-      id: entity.id,
-      subFolder: entity.subFolder,
-      tinyName: entity.tinyName,
-      smallName: entity.smallName,
-      bigName: entity.bigName,
-      mime: { id: entity.mime.id, type: entity.mime.type },
-      tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
-    };
-  }
-
-  async getByIdWithDeleted(id: number): Promise<PictureDataDto | undefined> {
-    const entity = await this.createQueryBuilder('picture')
-      .withDeleted()
-      .where('picture.id = :id', { id })
-      .leftJoinAndSelect('picture.mime', 'mime')
-      .leftJoinAndSelect('picture.tags', 'tags')
-      .getOne();
+    const entity = await query.getOne();
 
     if (!entity) {
       return undefined;
