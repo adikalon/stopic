@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { TagDataPopularDto } from './dto/tag-data-popular.dto';
 import { Tag } from './tag.entity';
 
 @EntityRepository(Tag)
@@ -41,5 +42,16 @@ export class TagRepository extends Repository<Tag> {
 
   async show(id: number): Promise<void> {
     await this.createQueryBuilder().restore().where({ id }).execute();
+  }
+
+  async getPopular(limit: number): Promise<TagDataPopularDto[]> {
+    return (await this.createQueryBuilder('tag')
+      .leftJoinAndSelect('tag.pictures', 'pictures')
+      .groupBy('tag.id')
+      .select(['tag.id AS id', 'tag.name AS name', 'COUNT(tag.id) as count'])
+      .orderBy('count', 'DESC')
+      .addOrderBy('tag.updatedDate', 'DESC')
+      .limit(limit)
+      .execute()) as TagDataPopularDto[];
   }
 }
