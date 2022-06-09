@@ -48,7 +48,7 @@ export class TagRepository extends Repository<Tag> {
 
   async getPopular(limit: number): Promise<TagDataPopularDto[]> {
     const result = (await this.createQueryBuilder('tag')
-      .leftJoinAndSelect('tag.pictures', 'pictures')
+      .leftJoin('tag.pictures', 'pictures')
       .groupBy('tag.id')
       .select(['tag.id AS id', 'tag.name AS name', 'COUNT(tag.id) as count'])
       .orderBy('count', 'DESC')
