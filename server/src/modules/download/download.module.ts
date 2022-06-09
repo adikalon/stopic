@@ -16,5 +16,6 @@ import { DownloadService } from './download.service';
   ],
   controllers: [DownloadController],
   providers: [DownloadService, YandexDiskService],
+  exports: [TypeOrmModule],
 })
 export class DownloadModule {}

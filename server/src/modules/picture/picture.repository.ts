@@ -58,7 +58,9 @@ export class PictureRepository extends Repository<Picture> {
       .addAndRemove(attached, detached);
   }
 
-  async getByToken(token: string): Promise<PictureDataDto | undefined> {
+  async getByToken(
+    token: string,
+  ): Promise<{ id: number; subFolder: string; mime: string } | undefined> {
     const entity = await this.createQueryBuilder('picture')
       .where('picture.token = :token', { token })
       .leftJoinAndSelect('picture.mime', 'mime')
@@ -72,11 +74,7 @@ export class PictureRepository extends Repository<Picture> {
     return {
       id: entity.id,
       subFolder: entity.subFolder,
-      tinyName: entity.tinyName,
-      smallName: entity.smallName,
-      bigName: entity.bigName,
-      mime: { id: entity.mime.id, type: entity.mime.type },
-      tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+      mime: entity.mime.type,
     };
   }
 
@@ -98,11 +96,33 @@ export class PictureRepository extends Repository<Picture> {
 
     return {
       id: entity.id,
+      width: entity.width,
+      height: entity.height,
+      size: entity.size,
+      link: entity.link,
+      url: entity.url,
+      title: entity.title,
+      description: entity.description,
+      header: entity.header,
+      content: entity.content,
       subFolder: entity.subFolder,
       tinyName: entity.tinyName,
+      tinyAlt: entity.tinyAlt,
+      tinyTitle: entity.tinyTitle,
+      tinyWidth: entity.tinyWidth,
+      tinyHeight: entity.tinyHeight,
       smallName: entity.smallName,
+      smallAlt: entity.smallAlt,
+      smallTitle: entity.smallTitle,
+      smallWidth: entity.smallWidth,
+      smallHeight: entity.smallHeight,
       bigName: entity.bigName,
-      mime: { id: entity.mime.id, type: entity.mime.type },
+      bigAlt: entity.bigAlt,
+      bigTitle: entity.bigTitle,
+      bigWidth: entity.bigWidth,
+      bigHeight: entity.bigHeight,
+      mime: entity.mime.type,
+      createdDate: entity.createdDate,
       tags: entity.tags.map((tag) => ({ id: tag.id, name: tag.name })),
     };
   }

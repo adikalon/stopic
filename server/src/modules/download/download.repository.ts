@@ -9,4 +9,10 @@ export class DownloadRepository extends Repository<Download> {
       .values({ visitorId, pictureId })
       .execute();
   }
+
+  async getCount(pictureId: number): Promise<number> {
+    return await this.createQueryBuilder('download')
+      .where('download.pictureId = :pictureId', { pictureId })
+      .getCount();
+  }
 }

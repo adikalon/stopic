@@ -44,14 +44,14 @@ export class DownloadController {
       throw new NotFoundException('Non-existent token');
     }
 
-    const ext = await this.mimeService.getExtByMime(picture.mime.type);
+    const ext = await this.mimeService.getExtByMime(picture.mime);
     const imageName = `${token}.${ext}`;
     const imagePath = path.join(__dirname, `/../../../temp/${imageName}`);
     const diskPath = `${picture.subFolder}/${picture.id}.zip`;
     const arcPath = path.join(__dirname, `/../../../temp/${token}.zip`);
     await this.yandexDiskService.download(diskPath, arcPath);
     await this.downloadService.extract(arcPath, imagePath);
-    res.set('Content-Type', picture.mime.type);
+    res.set('Content-Type', picture.mime);
     res.set('Content-Disposition', `attachment; filename=${picture.id}.${ext}`);
     const imageContent = await fsPromises.readFile(imagePath);
     await fsPromises.unlink(arcPath);

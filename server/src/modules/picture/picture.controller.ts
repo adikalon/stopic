@@ -35,7 +35,9 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '../../env.validation';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EditDto } from './dto/edit.dto';
-import { PictureDataDto } from './dto/picture-data.dto';
+import { PictureDataBigDto } from './dto/picture-data-big';
+import { ViewRepository } from '../view/view.repository';
+import { DownloadRepository } from '../download/download.repository';
 
 @Controller('picture')
 export class PictureController {
@@ -44,6 +46,10 @@ export class PictureController {
   constructor(
     @InjectRepository(PictureRepository)
     private readonly pictureRepository: PictureRepository,
+    @InjectRepository(ViewRepository)
+    private readonly viewRepository: ViewRepository,
+    @InjectRepository(DownloadRepository)
+    private readonly downloadRepository: DownloadRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -178,7 +184,7 @@ export class PictureController {
   async edit(
     @Param('id') id: number,
     @Body() body: EditDto,
-  ): Promise<PictureDataDto> {
+  ): Promise<PictureDataBigDto> {
     await this.connection.transaction(async (manager) => {
       const pictureRepository = manager.getCustomRepository(PictureRepository);
       const tagRepository = manager.getCustomRepository(TagRepository);
@@ -225,7 +231,27 @@ export class PictureController {
       throw new NotFoundException('Picture not found');
     }
 
-    return picture;
+    return {
+      id: picture.id,
+      width: picture.width,
+      height: picture.height,
+      size: picture.size,
+      link: picture.link,
+      title: picture.title,
+      description: picture.description,
+      header: picture.header,
+      content: picture.content,
+      previewName: picture.bigName,
+      previewAlt: picture.bigAlt,
+      previewTitle: picture.bigTitle,
+      previewWidth: picture.bigWidth,
+      previewHeight: picture.bigHeight,
+      mime: picture.mime,
+      created: picture.createdDate,
+      views: await this.viewRepository.getCount(picture.id),
+      downloads: await this.downloadRepository.getCount(picture.id),
+      tags: picture.tags,
+    };
   }
 
   @Get('/:id/preview/:image')
