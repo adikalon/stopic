@@ -17,14 +17,14 @@ export class Download {
   @PrimaryColumn('bigint', { unsigned: true, transformer: [bigint] })
   id!: number;
 
-  @ManyToOne(() => Visitor, (visitor) => visitor.views, { nullable: false })
+  @ManyToOne(() => Visitor, (visitor) => visitor.downloads, { nullable: false })
   @JoinColumn({ name: 'visitorId', referencedColumnName: 'id' })
   visitor!: Visitor;
 
   @Column()
   visitorId!: number;
 
-  @ManyToOne(() => Picture, (picture) => picture.views, { nullable: false })
+  @ManyToOne(() => Picture, (picture) => picture.downloads, { nullable: false })
   @JoinColumn({ name: 'pictureId', referencedColumnName: 'id' })
   picture!: Picture;
 

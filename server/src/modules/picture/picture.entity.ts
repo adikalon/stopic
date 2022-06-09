@@ -159,9 +159,9 @@ export class Picture {
   @JoinTable()
   tags!: Tag[];
 
-  @OneToMany(() => View, (view) => view.visitor)
+  @OneToMany(() => View, (view) => view.picture)
   views!: View[];
 
-  @OneToMany(() => Download, (download) => download.visitor)
+  @OneToMany(() => Download, (download) => download.picture)
   downloads!: Download[];
 }
