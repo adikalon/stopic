@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   Res,
   StreamableFile,
   UploadedFile,
@@ -38,6 +39,7 @@ import { EditDto } from './dto/edit.dto';
 import { PictureDataBigDto } from './dto/picture-data-big';
 import { ViewRepository } from '../view/view.repository';
 import { DownloadRepository } from '../download/download.repository';
+import { VisitorRequest } from '../visitor/visitor-request.interface';
 
 @Controller('picture')
 export class PictureController {
@@ -230,6 +232,42 @@ export class PictureController {
     if (!picture) {
       throw new NotFoundException('Picture not found');
     }
+
+    return {
+      id: picture.id,
+      width: picture.width,
+      height: picture.height,
+      size: picture.size,
+      link: picture.link,
+      title: picture.title,
+      description: picture.description,
+      header: picture.header,
+      content: picture.content,
+      previewName: picture.bigName,
+      previewAlt: picture.bigAlt,
+      previewTitle: picture.bigTitle,
+      previewWidth: picture.bigWidth,
+      previewHeight: picture.bigHeight,
+      mime: picture.mime,
+      created: picture.createdDate,
+      views: await this.viewRepository.getCount(picture.id),
+      downloads: await this.downloadRepository.getCount(picture.id),
+      tags: picture.tags,
+    };
+  }
+
+  @Get('/:id')
+  async item(
+    @Req() req: VisitorRequest,
+    @Param('id') id: number,
+  ): Promise<PictureDataBigDto> {
+    const picture = await this.pictureRepository.getById(id);
+
+    if (!picture) {
+      throw new NotFoundException('Picture not found');
+    }
+
+    await this.viewRepository.increase(req.visitor.id, picture.id);
 
     return {
       id: picture.id,
