@@ -5,6 +5,7 @@ import {
   Generated,
   CreateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Visitor } from '../visitor/visitor.entity';
 import { Picture } from '../picture/picture.entity';
@@ -17,10 +18,18 @@ export class View {
   id!: number;
 
   @ManyToOne(() => Visitor, (visitor) => visitor.views, { nullable: false })
+  @JoinColumn({ name: 'visitorId', referencedColumnName: 'id' })
   visitor!: Visitor;
 
+  @Column()
+  visitorId!: number;
+
   @ManyToOne(() => Picture, (picture) => picture.views, { nullable: false })
+  @JoinColumn({ name: 'pictureId', referencedColumnName: 'id' })
   picture!: Picture;
+
+  @Column()
+  pictureId!: number;
 
   @Column({ type: 'timestamp' })
   bannedTo!: Date;
