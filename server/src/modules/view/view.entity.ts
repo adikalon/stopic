@@ -31,9 +31,6 @@ export class View {
   @Column()
   pictureId!: number;
 
-  @Column({ type: 'timestamp' })
-  bannedTo!: Date;
-
   @CreateDateColumn()
   createdDate!: Date;
 }
