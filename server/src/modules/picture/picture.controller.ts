@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
@@ -40,6 +41,7 @@ import { PictureDataBigDto } from './dto/picture-data-big';
 import { ViewRepository } from '../view/view.repository';
 import { DownloadRepository } from '../download/download.repository';
 import { VisitorRequest } from '../visitor/visitor-request.interface';
+import { PictureDataTinyDto } from './dto/picture-data-tiny.dto';
 
 @Controller('picture')
 export class PictureController {
@@ -52,6 +54,8 @@ export class PictureController {
     private readonly viewRepository: ViewRepository,
     @InjectRepository(DownloadRepository)
     private readonly downloadRepository: DownloadRepository,
+    @InjectRepository(MimeRepository)
+    private readonly mimeRepository: MimeRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -329,5 +333,47 @@ export class PictureController {
     const imageContent = await fsPromises.readFile(imagePath);
 
     return new StreamableFile(imageContent);
+  }
+
+  @Get('/recommended/:id')
+  async recommended(@Param('id') id: number): Promise<PictureDataTinyDto[]> {
+    const recommendeds: PictureDataTinyDto[] = [];
+    const recs = await this.pictureRepository.getRecommended(id, 10);
+
+    for (const rec of recs) {
+      const mime = await this.mimeRepository.getTypeById(+rec.mimeId);
+
+      if (!mime) {
+        throw new InternalServerErrorException('Mime not found');
+      }
+
+      const picture = await this.pictureRepository.getById(+rec.id);
+
+      if (!picture) {
+        throw new InternalServerErrorException('Picture not found');
+      }
+
+      recommendeds.push({
+        id: +rec.id,
+        width: rec.width,
+        height: rec.height,
+        size: rec.size,
+        link: rec.link,
+        url: rec.url,
+        header: rec.header,
+        previewName: rec.tinyName,
+        previewAlt: rec.tinyAlt,
+        previewTitle: rec.tinyTitle,
+        previewWidth: rec.tinyWidth,
+        previewHeight: rec.tinyHeight,
+        mime: mime,
+        views: +rec.views,
+        downloads: +rec.downloads,
+        created: rec.createdDate,
+        tags: picture.tags,
+      });
+    }
+
+    return recommendeds;
   }
 }

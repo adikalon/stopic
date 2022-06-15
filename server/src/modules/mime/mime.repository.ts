@@ -23,4 +23,16 @@ export class MimeRepository extends Repository<Mime> {
 
     return +id;
   }
+
+  async getTypeById(id: number): Promise<string | undefined> {
+    const mime = await this.createQueryBuilder('mime')
+      .where('mime.id = :id', { id })
+      .getOne();
+
+    if (!mime) {
+      return undefined;
+    }
+
+    return mime.type;
+  }
 }

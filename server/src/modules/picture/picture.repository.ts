@@ -1,5 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { Download } from '../download/download.entity';
+import { View } from '../view/view.entity';
 import { PictureDataDto } from './dto/picture-data.dto';
+import { RecommendedDto } from './dto/recommended.dto';
 import { CreateInterface } from './interfaces/create.interface';
 import { EditInterface } from './interfaces/edit.interface';
 import { Picture } from './picture.entity';
@@ -207,5 +210,59 @@ export class PictureRepository extends Repository<Picture> {
       .where('id = :id', { id: pictureId })
       .set(upd)
       .execute();
+  }
+
+  async getRecommended(
+    pictureId: number,
+    limit: number,
+  ): Promise<RecommendedDto[]> {
+    return (await this.createQueryBuilder('picture')
+      .leftJoin('picture.tags', 'tag')
+      .groupBy('picture.id')
+      .where('picture.id != :id', { id: pictureId })
+      .andWhere(
+        'tag.id IN ' +
+          this.createQueryBuilder()
+            .subQuery()
+            .select('tag.id')
+            .where('picture.id = :id', { id: pictureId })
+            .from(Picture, 'picture')
+            .leftJoin('picture.tags', 'tag')
+            .getQuery(),
+      )
+      .select([
+        '"picture"."id" AS "id"',
+        '"picture"."width" AS "width"',
+        '"picture"."height" AS "height"',
+        '"picture"."size" AS "size"',
+        '"picture"."link" AS "link"',
+        '"picture"."url" AS "url"',
+        '"picture"."header" AS "header"',
+        '"picture"."tinyName" AS "tinyName"',
+        '"picture"."tinyAlt" AS "tinyAlt"',
+        '"picture"."tinyTitle" AS "tinyTitle"',
+        '"picture"."tinyWidth" AS "tinyWidth"',
+        '"picture"."tinyHeight" AS "tinyHeight"',
+        '"picture"."createdDate" AS "createdDate"',
+        '"picture"."mimeId" AS "mimeId"',
+        'COUNT("picture"."id") AS "coincidences"',
+      ])
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(download.id)')
+          .from(Download, 'download')
+          .where('download.pictureId = picture.id');
+      }, 'downloads')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(view.id)')
+          .from(View, 'view')
+          .where('view.pictureId = picture.id');
+      }, 'views')
+      .limit(limit)
+      .orderBy('coincidences', 'DESC')
+      .addOrderBy('downloads', 'DESC')
+      .addOrderBy('views', 'DESC')
+      .execute()) as RecommendedDto[];
   }
 }

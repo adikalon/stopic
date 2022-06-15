@@ -6,6 +6,6 @@ import { MimeService } from './mime.service';
 @Module({
   imports: [TypeOrmModule.forFeature([MimeRepository])],
   providers: [MimeService],
-  exports: [MimeService],
+  exports: [MimeService, TypeOrmModule],
 })
 export class MimeModule {}
