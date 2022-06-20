@@ -1,11 +1,14 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Download } from '../download/download.entity';
 import { View } from '../view/view.entity';
+import { ItemsDto } from './dto/items.dto';
 import { PictureDataDto } from './dto/picture-data.dto';
 import { RecommendedDto } from './dto/recommended.dto';
 import { CreateInterface } from './interfaces/create.interface';
 import { EditInterface } from './interfaces/edit.interface';
+import { ItemsInterface } from './interfaces/items.interface';
 import { Picture } from './picture.entity';
+import { SortEnum } from './sort.enum';
 
 @EntityRepository(Picture)
 export class PictureRepository extends Repository<Picture> {
@@ -264,5 +267,86 @@ export class PictureRepository extends Repository<Picture> {
       .addOrderBy('downloads', 'DESC')
       .addOrderBy('views', 'DESC')
       .execute()) as RecommendedDto[];
+  }
+
+  async getItems(
+    params: ItemsInterface,
+  ): Promise<{ count: number; recs: ItemsDto[] }> {
+    const direction = params.direction.toUpperCase() as 'ASC' | 'DESC';
+    let query = this.createQueryBuilder('picture')
+      .leftJoin('picture.tags', 'tag')
+      .select([
+        'picture.id AS "id"',
+        'picture.width AS "width"',
+        'picture.height AS "height"',
+        'picture.size AS "size"',
+        'picture.link AS "link"',
+        'picture.url AS "url"',
+        'picture.header AS "header"',
+        'picture.height AS "height"',
+        'picture.smallName AS "smallName"',
+        'picture.smallAlt AS "smallAlt"',
+        'picture.smallTitle AS "smallTitle"',
+        'picture.smallWidth AS "smallWidth"',
+        'picture.smallHeight AS "smallHeight"',
+        'picture.createdDate AS "createdDate"',
+        'picture.mimeId AS "mimeId"',
+      ])
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(download.id)')
+          .from(Download, 'download')
+          .where('download.pictureId = picture.id');
+      }, 'downloads')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COUNT(view.id)')
+          .from(View, 'view')
+          .where('view.pictureId = picture.id');
+      }, 'views')
+      .groupBy('picture.id');
+
+    if (params.sort === SortEnum.downloads) {
+      query = query.orderBy('picture.downloads', direction);
+    } else if (params.sort === SortEnum.views) {
+      query = query.orderBy('picture.views', direction);
+    } else {
+      query = query.orderBy('picture.createdDate', direction);
+    }
+
+    if (params.search) {
+      query = query.andWhere(
+        'to_tsvector(picture.title) || to_tsvector(picture.description) || to_tsvector(picture.header) || to_tsvector(picture.content) || to_tsvector(picture.tinyAlt) || to_tsvector(picture.tinyTitle) || to_tsvector(picture.smallAlt) || to_tsvector(picture.smallTitle) || to_tsvector(picture.bigAlt) || to_tsvector(picture.bigTitle) @@ plainto_tsquery(:search)',
+        { search: params.search },
+      );
+    }
+
+    if (params.fromWidth) {
+      query = query.andWhere('width >= :fw', { fw: params.fromWidth });
+    }
+
+    if (params.fromHeight) {
+      query = query.andWhere('height >= :fh', { fh: params.fromHeight });
+    }
+
+    if (params.toWidth) {
+      query = query.andWhere('width <= :tw', { tw: params.toWidth });
+    }
+
+    if (params.toHeight) {
+      query = query.andWhere('height <= :th', { th: params.toHeight });
+    }
+
+    if (params.tags) {
+      query = query.andWhere('tag.id IN (:...tags)', { tags: params.tags });
+    }
+
+    const count = await query.getCount();
+    const recs: ItemsDto[] = await query
+      .offset(params.offset)
+      .limit(params.limit)
+      .execute();
+
+    return { count, recs };
   }
 }

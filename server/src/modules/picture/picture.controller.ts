@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   StreamableFile,
@@ -42,6 +43,9 @@ import { ViewRepository } from '../view/view.repository';
 import { DownloadRepository } from '../download/download.repository';
 import { VisitorRequest } from '../visitor/visitor-request.interface';
 import { PictureDataTinyDto } from './dto/picture-data-tiny.dto';
+import { ItemsQueryDto } from './dto/items-query.dto';
+import { SortEnum } from './sort.enum';
+import { PictureDataSmallDto } from './dto/picture-data-small.dto';
 
 @Controller('picture')
 export class PictureController {
@@ -54,8 +58,6 @@ export class PictureController {
     private readonly viewRepository: ViewRepository,
     @InjectRepository(DownloadRepository)
     private readonly downloadRepository: DownloadRepository,
-    @InjectRepository(MimeRepository)
-    private readonly mimeRepository: MimeRepository,
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly connection: Connection,
     private readonly pictureService: PictureService,
@@ -341,12 +343,6 @@ export class PictureController {
     const recs = await this.pictureRepository.getRecommended(id, 10);
 
     for (const rec of recs) {
-      const mime = await this.mimeRepository.getTypeById(+rec.mimeId);
-
-      if (!mime) {
-        throw new InternalServerErrorException('Mime not found');
-      }
-
       const picture = await this.pictureRepository.getById(+rec.id);
 
       if (!picture) {
@@ -366,7 +362,7 @@ export class PictureController {
         previewTitle: rec.tinyTitle,
         previewWidth: rec.tinyWidth,
         previewHeight: rec.tinyHeight,
-        mime: mime,
+        mime: picture.mime,
         views: +rec.views,
         downloads: +rec.downloads,
         created: rec.createdDate,
@@ -375,5 +371,63 @@ export class PictureController {
     }
 
     return recommendeds;
+  }
+
+  @Get('/')
+  async items(
+    @Res({ passthrough: true }) res: Response,
+    @Query() query: ItemsQueryDto,
+  ): Promise<PictureDataSmallDto[]> {
+    const items: PictureDataSmallDto[] = [];
+    const page = query.page || 1;
+    const limit = query.limit || 25;
+
+    const params = {
+      offset: (page - 1) * limit,
+      limit: limit,
+      sort: query.sort || SortEnum.fresh,
+      direction: query.direction || 'desc',
+      search: query.search,
+      fromWidth: query.fromWidth,
+      fromHeight: query.fromHeight,
+      toWidth: query.toWidth,
+      toHeight: query.toHeight,
+      tags: query.tags,
+    };
+
+    const recs = await this.pictureRepository.getItems(params);
+
+    for (const rec of recs.recs) {
+      const picture = await this.pictureRepository.getById(+rec.id);
+
+      if (!picture) {
+        throw new InternalServerErrorException('Picture not found');
+      }
+
+      items.push({
+        id: +rec.id,
+        width: rec.width,
+        height: rec.height,
+        size: rec.size,
+        link: rec.link,
+        url: rec.url,
+        header: rec.header,
+        previewName: rec.smallName,
+        previewAlt: rec.smallAlt,
+        previewTitle: rec.smallTitle,
+        previewWidth: rec.smallWidth,
+        previewHeight: rec.smallHeight,
+        mime: picture.mime,
+        created: rec.createdDate,
+        views: +rec.views,
+        downloads: +rec.downloads,
+        tags: picture.tags,
+      });
+    }
+
+    res.set('Pagination-Total', recs.count.toString());
+    res.set('Pagination-Limit', limit.toString());
+
+    return items;
   }
 }
