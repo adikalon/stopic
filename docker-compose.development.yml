@@ -61,12 +61,29 @@ services:
       - server
     image: nginx:${TAG_NGINX}
     ports:
-      - ${PORT}:8080
+      - ${PORT}:80
+      - ${PORT_SSL}:443
     restart: ${RESTART}
     volumes:
       - type: bind
-        source: ./nginx.conf
+        source: ./nginx/nginx.conf
         target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./nginx/http.conf
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+      - type: bind
+        source: ./nginx/https.conf
+        target: /etc/nginx/templates/https.conf.template
+        read_only: true
+      - type: bind
+        source: ./nginx/ssl.crt
+        target: /etc/nginx/ssl.crt
+        read_only: true
+      - type: bind
+        source: ./nginx/ssl.key
+        target: /etc/nginx/ssl.key
         read_only: true
 
 volumes:
