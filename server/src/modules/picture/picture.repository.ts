@@ -87,6 +87,7 @@ export class PictureRepository extends Repository<Picture> {
   async getById(id: number, del = false): Promise<PictureDataDto | undefined> {
     let query = this.createQueryBuilder('picture')
       .where('picture.id = :id', { id })
+      .andWhere('picture.active = :active', { active: true })
       .leftJoinAndSelect('picture.mime', 'mime')
       .leftJoinAndSelect('picture.tags', 'tags');
 
@@ -304,7 +305,7 @@ export class PictureRepository extends Repository<Picture> {
           .from(View, 'view')
           .where('view.pictureId = picture.id');
       }, 'views')
-      .where('active = :active', { active: true })
+      .where('picture.active = :active', { active: true })
       .groupBy('picture.id');
 
     if (params.sort === SortEnum.downloads) {
