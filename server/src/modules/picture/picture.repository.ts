@@ -304,6 +304,7 @@ export class PictureRepository extends Repository<Picture> {
           .from(View, 'view')
           .where('view.pictureId = picture.id');
       }, 'views')
+      .where('active = :active', { active: true })
       .groupBy('picture.id');
 
     if (params.sort === SortEnum.downloads) {
