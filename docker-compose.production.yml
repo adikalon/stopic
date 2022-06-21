@@ -60,7 +60,8 @@ services:
       - app
     image: nginx:${TAG_NGINX}
     ports:
-      - ${PORT}:8080
+      - ${PORT}:80
+      - ${PORT_SSL}:443
     restart: ${RESTART}
     volumes:
       - type: bind
