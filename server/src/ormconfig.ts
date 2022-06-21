@@ -11,9 +11,10 @@ export default {
   username: configService.get('PG_USER'),
   password: configService.get('PG_PASSWORD'),
   database: configService.get('PG_BASENAME'),
-  synchronize: true,
-  migrationsRun: false,
+  synchronize: false,
+  migrationsRun: true,
   autoLoadEntities: true,
+  entities: [`${__dirname}/**/*.entity.ts`],
   migrations: [`${__dirname}/database/migrations/**/*.js`],
   cli: {
     migrationsDir: 'src/database/migrations',
