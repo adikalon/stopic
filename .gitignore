@@ -1,5 +1,8 @@
 /server/node_modules
 /server/dist
+/client/node_modules
+/client/dist
+/client/.angular
 /nginx/ssl.crt
 /nginx/ssl.key
 /.env

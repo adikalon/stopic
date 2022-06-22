@@ -38,7 +38,7 @@ services:
   server:
     build:
       args:
-        tag: ${TAG_NODE}
+        tag: ${TAG_NODE_SERVER}
       context: ./server
       target: development
     command: npm run start:dev
@@ -51,6 +51,19 @@ services:
       - ./server/src:/home/node/app/src
       - temp:/home/node/app/temp
       - storage:/home/node/app/storage
+
+  client:
+    build:
+      args:
+        tag: ${TAG_NODE_CLIENT}
+      context: ./client
+      target: development
+    command: npm run dev:ssr
+    depends_on:
+      - server
+    env_file:
+      - .env
+    restart: ${RESTART}
 
   nginx:
     env_file:
