@@ -64,6 +64,8 @@ services:
     env_file:
       - .env
     restart: ${RESTART}
+    volumes:
+      - ./client/src:/home/node/app/src
 
   nginx:
     env_file:
