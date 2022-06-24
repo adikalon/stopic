@@ -74,8 +74,8 @@ services:
       - server
     image: nginx:${TAG_NGINX}
     ports:
-      - ${PORT}:80
-      - ${PORT_SSL}:443
+      - ${PORT_HTTP}:80
+      - ${PORT_HTTPS}:443
     restart: ${RESTART}
     volumes:
       - type: bind
