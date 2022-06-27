@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
+import { RouterModule } from '@angular/router';
+import { AdminModule } from './admin/admin.module';
 import { AppComponent } from './app.component';
+import { PictureModule } from './picture/picture.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    AppRoutingModule
+    RouterModule.forRoot([], {
+      initialNavigation: 'enabledBlocking',
+    }),
+    AdminModule,
+    PictureModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
