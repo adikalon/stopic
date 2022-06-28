@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dev:ssr": "ng run client:serve-ssr",
+    "dev:ssr": "ng run client:serve-ssr --public-host",
     "serve:ssr": "node dist/client/server/main.js",
     "build:ssr": "ng build && ng run client:server",
     "prerender": "ng run client:prerender"
@@ -25,6 +25,7 @@
     "@angular/router": "^14.0.0",
     "@nguniversal/express-engine": "^14.0.1",
     "express": "^4.15.2",
+    "ngx-cookie-service-ssr": "^14.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
