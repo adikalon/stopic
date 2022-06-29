@@ -24,6 +24,7 @@
     "@angular/platform-server": "^14.0.0",
     "@angular/router": "^14.0.0",
     "@nguniversal/express-engine": "^14.0.1",
+    "@ngx-env/builder": "^2.2.0",
     "express": "^4.15.2",
     "ngx-cookie-service-ssr": "^14.0.1",
     "rxjs": "~7.5.0",
