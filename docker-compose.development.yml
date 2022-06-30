@@ -58,7 +58,7 @@ services:
         tag: ${TAG_NODE_CLIENT}
       context: ./client
       target: development
-    command: npm run dev:ssr ${APP_URL}
+    command: npm run dev:ssr:ph ${APP_URL}
     depends_on:
       - server
     env_file:
