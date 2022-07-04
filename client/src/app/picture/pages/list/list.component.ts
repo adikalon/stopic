@@ -17,7 +17,7 @@ export class ListComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       const pictures = await lastValueFrom(
-        this.httpClient.get(`${environment.appUrl}/api/pictures`),
+        this.httpClient.get(`${environment.appUrl}/api/picture`),
       );
 
       console.log(pictures);
