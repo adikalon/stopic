@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -8,20 +9,26 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './list.component.html',
 })
 export class ListComponent implements OnInit {
-  error: string | undefined;
-
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(
+    private readonly httpClient: HttpClient,
+    private messageService: MessageService,
+  ) {}
 
   async ngOnInit(): Promise<void> {
     try {
       const pictures = await lastValueFrom(
-        this.httpClient.get(`${environment.appUrl}/api/picture`),
+        this.httpClient.get(`${environment.appUrl}/api/pictures`),
       );
 
       console.log(pictures);
     } catch (err: any) {
       if (err instanceof HttpErrorResponse) {
-        this.error = err.error;
+        this.messageService.add({
+          severity: 'error',
+          sticky: true,
+          summary: 'Sorry, an error has occurred :(',
+          detail: err.error,
+        });
       }
 
       console.error(err);
