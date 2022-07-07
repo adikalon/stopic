@@ -27,6 +27,7 @@
     "@nguniversal/express-engine": "^14.0.1",
     "express": "^4.15.2",
     "ngx-cookie-service-ssr": "^14.0.1",
+    "primeflex": "^3.2.1",
     "primeicons": "^5.0.0",
     "primeng": "^14.0.0-rc.1",
     "rxjs": "~7.5.0",
