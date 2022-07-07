@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -25,6 +24,5 @@ import { PictureRoutingModule } from './picture.routing.module';
     DataViewModule,
     ImageModule,
   ],
-  providers: [MessageService],
 })
 export class PictureModule {}

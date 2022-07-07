@@ -12,6 +12,7 @@ const keyPicturesError = makeStateKey('PICTURES_ERROR');
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
+  providers: [MessageService],
 })
 export class ListComponent implements OnInit {
   pictures: PictureInterface[] = [];
