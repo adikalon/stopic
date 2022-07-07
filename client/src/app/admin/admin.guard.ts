@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { CanActivate, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { lastValueFrom } from 'rxjs';
+import { ConfigService } from '../core/services/config.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -11,6 +11,7 @@ export class AdminGuard implements CanActivate {
     private readonly router: Router,
     private readonly ssrCookieService: SsrCookieService,
     private readonly httpClient: HttpClient,
+    private readonly configService: ConfigService,
   ) {}
 
   async canActivate(): Promise<boolean> {
@@ -21,9 +22,11 @@ export class AdminGuard implements CanActivate {
       return false;
     }
 
+    const appUrl = (await this.configService.getConfig()).appUrl;
+
     try {
       await lastValueFrom(
-        this.httpClient.post(`${environment.appUrl}/api/visitor/auth`, null, {
+        this.httpClient.post(`${appUrl}/api/visitor/auth`, null, {
           headers: { Authorization: `Bearer ${auth}` },
         }),
       );
