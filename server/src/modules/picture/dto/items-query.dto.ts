@@ -75,8 +75,12 @@ export class ItemsQueryDto {
   @ArrayMinSize(1)
   @ArrayMaxSize(50)
   @ArrayUnique()
-  @Transform(({ value }) => value.filter((v: string) => !isNaN(+v) && +v))
-  @Transform(({ value }) => value.map((v: string) => +v))
+  @Transform(({ value }) =>
+    value
+      .split(',')
+      .filter((v: string) => !isNaN(+v) && +v)
+      .map((v: string) => +v),
+  )
   @IsOptional()
   tags?: number[];
 }
