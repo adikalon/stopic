@@ -1,9 +1,15 @@
 <p-toast position="bottom-right"></p-toast>
+<p-progressBar mode="indeterminate" *ngIf="progress"></p-progressBar>
+<p-paginator #paginatorTop [rows]="limit" [totalRecords]="total" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
+<app-server-paginator [total]="total" [limit]="limit" *ngIf="isServer"></app-server-paginator>
 
 <p-dataView [value]="pictures" layout="grid" *ngIf="pictures.length > 0">
   <ng-template let-picture pTemplate="gridItem">
     <div class="col-12 md:col-3">
-      <p-image src="https://www.primefaces.org/primeng/assets/showcase/images/galleria/galleria1.jpg" alt="Image" width="250"></p-image>
+      <p-image src="{{ 'http://localhost:3000/api/picture/' + picture.id +'/preview/' + picture.previewName + '.webp' }}" alt="Image" width="250"></p-image>
     </div>
   </ng-template>
 </p-dataView>
+
+<p-paginator #paginatorBottom [rows]="limit" [totalRecords]="total" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
+<app-server-paginator [total]="total" [limit]="limit" *ngIf="isServer"></app-server-paginator>

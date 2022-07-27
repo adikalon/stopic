@@ -25,6 +25,14 @@ export class ListService {
   ): Promise<PicturesGetInterface> {
     const query = new URLSearchParams();
 
+    if (params.page) {
+      query.append('page', params.page);
+    }
+
+    if (params.limit) {
+      query.append('limit', params.limit);
+    }
+
     if (params.sort) {
       query.append('sort', params.sort);
     }

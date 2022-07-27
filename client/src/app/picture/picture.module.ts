@@ -10,9 +10,12 @@ import { ImageModule } from 'primeng/image';
 import { ListComponent } from './pages';
 import { PictureComponent } from './picture.component';
 import { PictureRoutingModule } from './picture.routing.module';
+import { PaginatorModule } from 'primeng/paginator';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ServerPaginator } from './pages/list/components/server-paginator/server-paginator';
 
 @NgModule({
-  declarations: [PictureComponent, ListComponent],
+  declarations: [PictureComponent, ListComponent, ServerPaginator],
   imports: [
     PictureRoutingModule,
     BrowserAnimationsModule,
@@ -23,6 +26,8 @@ import { PictureRoutingModule } from './picture.routing.module';
     TooltipModule,
     DataViewModule,
     ImageModule,
+    PaginatorModule,
+    ProgressBarModule,
   ],
 })
 export class PictureModule {}

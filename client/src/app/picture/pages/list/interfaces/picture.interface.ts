@@ -16,6 +16,7 @@ export interface PictureInterface {
   previewTitle: string;
   previewWidth: number;
   previewHeight: number;
+  previewLink: string;
   mime: string;
   created: Date;
   views: number;
