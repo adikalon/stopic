@@ -1,3 +1,5 @@
+<p-toast position="bottom-right"></p-toast>
+
 <p-toolbar>
   <div class="p-inputgroup">
     <div style="margin-right: 20px;">
@@ -8,8 +10,13 @@
     <button pButton type="button" icon="pi pi-filter" class="p-button-text" pTooltip="Filter"></button>
     <button pButton type="button" icon="pi pi-tag" class="p-button-text" pTooltip="Tags"></button> -->
     <p-button type="button" pRipple icon="pi pi-search" styleClass="p-button-warn"></p-button>
-    <p-button type="button" icon="pi pi-filter" class="p-button-text" pTooltip="Filter"></p-button>
-    <p-button type="button" icon="pi pi-tag" class="p-button-text" pTooltip="Tags"></p-button>
+    <p-button type="button" icon="pi pi-filter" styleClass="p-button-text" pTooltip="Filter"></p-button>
+    <p-button type="button" icon="pi pi-tag" styleClass="p-button-text" pTooltip="Tags" (onClick)="showTags = !showTags"></p-button>
   </div>
 </p-toolbar>
+
+<p-toolbar *ngIf="showTags">
+  <p-button type="button" [label]="tag.name" styleClass="p-button-sm p-button-outlined" (onClick)="search({ tags: tag.id })" *ngFor="let tag of tags"></p-button>
+</p-toolbar>
+
 <router-outlet></router-outlet>

@@ -1,6 +1,6 @@
 <p-toast position="bottom-right"></p-toast>
 <p-progressBar mode="indeterminate" *ngIf="progress"></p-progressBar>
-<p-paginator #paginatorTop [rows]="limit" [totalRecords]="total" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
+<p-paginator [rows]="limit" [totalRecords]="total" [first]="(page - 1) * limit" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
 <app-server-paginator [total]="total" [limit]="limit" *ngIf="isServer"></app-server-paginator>
 
 <p-dataView [value]="pictures" layout="grid" *ngIf="pictures.length > 0">
@@ -11,5 +11,5 @@
   </ng-template>
 </p-dataView>
 
-<p-paginator #paginatorBottom [rows]="limit" [totalRecords]="total" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
+<p-paginator [rows]="limit" [totalRecords]="total" [first]="(page - 1) * limit" (onPageChange)="paginate($event)" *ngIf="!isServer"></p-paginator>
 <app-server-paginator [total]="total" [limit]="limit" *ngIf="isServer"></app-server-paginator>
