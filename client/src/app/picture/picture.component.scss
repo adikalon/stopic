@@ -1,0 +1,9 @@
+.p-inputgroup {
+  & > p-button {
+    display: inline-flex;
+  }
+}
+
+.p-button-active {
+  background-color: #e0e0e0;
+}
