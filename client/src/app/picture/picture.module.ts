@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -21,7 +20,6 @@ import { TagModule } from 'primeng/tag';
     PictureRoutingModule,
     BrowserAnimationsModule,
     ToastModule,
-    ToolbarModule,
     InputTextModule,
     ButtonModule,
     TooltipModule,
