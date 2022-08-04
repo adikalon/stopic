@@ -5,9 +5,17 @@
 
 <p-dataView [value]="pictures" layout="grid" *ngIf="pictures.length > 0">
   <ng-template let-picture pTemplate="gridItem">
-    <div class="col-12 md:col-3">
-      <p-image src="{{ 'http://localhost:3000/api/picture/' + picture.id +'/preview/' + picture.previewName + '.webp' }}" alt="Image" width="250"></p-image>
-    </div>
+    <a routerLink="/{{ picture.url }}-{{ picture.id }}">
+      <div class="col-12 md:col-3">
+        <p-image
+          src="/api/picture/{{ picture.id }}/preview/{{ picture.previewName }}.webp"
+          alt="{{ picture.previewAlt }}"
+          title="{{ picture.title }}"
+          width="{{ picture.width }}"
+          height="{{ picture.height }}"
+        ></p-image>
+      </div>
+    </a>
   </ng-template>
 </p-dataView>
 
