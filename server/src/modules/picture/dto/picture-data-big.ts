@@ -9,6 +9,7 @@ export class PictureDataBigDto {
   height!: number;
   size!: number;
   link!: string;
+  url!: string;
   title!: string;
   description!: string;
   header!: string;
