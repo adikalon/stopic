@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DataViewModule } from 'primeng/dataview';
 import { ImageModule } from 'primeng/image';
-import { ListComponent } from './pages';
+import { ItemComponent, ListComponent } from './pages';
 import { PictureComponent } from './picture.component';
 import { PictureRoutingModule } from './picture.routing.module';
 import { PaginatorModule } from 'primeng/paginator';
@@ -15,7 +15,12 @@ import { ServerPaginator } from './pages/list/components/server-paginator/server
 import { TagModule } from 'primeng/tag';
 
 @NgModule({
-  declarations: [PictureComponent, ListComponent, ServerPaginator],
+  declarations: [
+    PictureComponent,
+    ListComponent,
+    ServerPaginator,
+    ItemComponent,
+  ],
   imports: [
     PictureRoutingModule,
     BrowserAnimationsModule,
