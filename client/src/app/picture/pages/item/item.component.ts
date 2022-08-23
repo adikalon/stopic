@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 import { ErrorInterface } from './interfaces/error.interface';
 import { PictureInterface } from './interfaces/picture.interface';
+import { RecommendedInterface } from './interfaces/recommended.interface';
 import { ItemService } from './item.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { ItemService } from './item.service';
 export class ItemComponent {
   progress = true;
   picture: PictureInterface | undefined;
+  recommended: RecommendedInterface[] | undefined;
   error: ErrorInterface | undefined;
 
   constructor(
@@ -45,17 +47,21 @@ export class ItemComponent {
 
         const id = match.groups?.['id'] as unknown as number;
         const url = match.groups?.['url'] as unknown as string;
-        this.itemService
-          .getPicture(id, event.id !== 1)
-          .then((picture) => {
-            if (picture.url !== url) {
+
+        Promise.all([
+          this.itemService.getPicture(id, event.id !== 1),
+          this.itemService.getRecommended(id, event.id !== 1),
+        ])
+          .then((res) => {
+            if (res[0].url !== url) {
               throw {
                 status: 404,
                 statusText: 'Not Found',
                 error: 'Incorrect link',
               };
             }
-            this.picture = picture;
+            this.picture = res[0];
+            this.recommended = res[1];
           })
           .catch((err: any) => {
             if (isPlatformServer(this.platformId)) {
@@ -80,6 +86,12 @@ export class ItemComponent {
           })
           .finally(() => (this.progress = false));
       }
+    });
+  }
+
+  async search(params: any) {
+    await this.router.navigate(['/'], {
+      queryParams: params,
     });
   }
 }
