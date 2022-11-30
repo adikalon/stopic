@@ -58,14 +58,17 @@ services:
         tag: ${TAG_NODE_CLIENT}
       context: ./client
       target: development
-    command: npm run dev:ssr:ph ${APP_URL}
+    command: npm run dev
     depends_on:
       - server
     env_file:
       - .env
     restart: ${RESTART}
     volumes:
-      - ./client/src:/home/node/app/src
+      - ./client/components:/home/node/app/components
+      - ./client/pages:/home/node/app/pages
+      - ./client/static:/home/node/app/static
+      - ./client/store:/home/node/app/store
 
   nginx:
     env_file:

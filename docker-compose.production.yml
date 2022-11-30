@@ -57,7 +57,7 @@ services:
         tag: ${TAG_NODE_CLIENT}
       context: ./client
       target: production
-    command: node dist/client/server/main.js
+    command: npm run start
     depends_on:
       - server
     env_file:
@@ -70,7 +70,7 @@ services:
     depends_on:
       - dozzle
       - adminer
-      - app
+      - server
     image: nginx:${TAG_NGINX}
     ports:
       - ${PORT_HTTP}:80

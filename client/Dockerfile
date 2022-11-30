@@ -10,7 +10,7 @@ USER node
 COPY --chown=node:node package*.json ./
 RUN npm install
 COPY --chown=node:node . .
-RUN npm run build:ssr
+RUN npm run build
 
 FROM node:$tag AS production
 RUN \
@@ -23,12 +23,9 @@ COPY --chown=node:node package*.json ./
 RUN npm install --only=production
 COPY --chown=node:node . .
 RUN \
-  rm -rf ./src \
-  && rm ./.browserslistrc \
-  && rm ./angular.json \
-  && rm ./karma.conf.js \
-  && rm ./tsconfig.app.json \
-  && rm ./tsconfig.json \
-  && rm ./tsconfig.server.json \
-  && rm ./tsconfig.spec.json
-COPY --chown=node:node --from=development /home/node/app/dist ./dist
+  rm -rf ./components \
+  && rm -rf ./pages \
+  && rm -rf ./static \
+  && rm -rf ./store \
+  && rm ./tsconfig.json
+COPY --chown=node:node --from=development /home/node/app/.nuxt ./.nuxt
