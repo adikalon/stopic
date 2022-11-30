@@ -65,6 +65,7 @@ services:
       - .env
     restart: ${RESTART}
     volumes:
+      - ./client/assets:/home/node/app/assets
       - ./client/components:/home/node/app/components
       - ./client/pages:/home/node/app/pages
       - ./client/static:/home/node/app/static

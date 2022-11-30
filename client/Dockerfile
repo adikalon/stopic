@@ -23,9 +23,9 @@ COPY --chown=node:node package*.json ./
 RUN npm install --only=production
 COPY --chown=node:node . .
 RUN \
-  rm -rf ./components \
+  rm -rf ./assets \
+  && rm -rf ./components \
   && rm -rf ./pages \
-  && rm -rf ./static \
   && rm -rf ./store \
   && rm ./tsconfig.json
 COPY --chown=node:node --from=development /home/node/app/.nuxt ./.nuxt
