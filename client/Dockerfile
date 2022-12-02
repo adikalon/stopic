@@ -27,5 +27,5 @@ RUN \
   && rm -rf ./components \
   && rm -rf ./pages \
   && rm -rf ./store \
-  && rm ./tsconfig.json
+  && rm ./.eslintrc.js
 COPY --chown=node:node --from=development /home/node/app/.nuxt ./.nuxt

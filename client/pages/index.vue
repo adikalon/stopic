@@ -1,11 +1,11 @@
 <template>
-  <Tutorial />
+  <main-menu />
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
-  name: 'IndexPage'
-})
+<script>
+import MainMenu from '../components/MainMenu.vue'
+export default {
+  name: 'IndexPage',
+  components: { MainMenu }
+}
 </script>

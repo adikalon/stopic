@@ -2,4 +2,3 @@
 /.nuxt
 /Dockerfile
 /.dockerignore
-/.eslintrc.js
