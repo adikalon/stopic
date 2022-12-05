@@ -16,6 +16,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: '/bootstrap.bundle.min.js', body: true }
     ]
   },
 
