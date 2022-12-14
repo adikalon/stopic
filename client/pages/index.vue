@@ -1,9 +1,7 @@
 <template>
   <div>
-    <main-menu />
-
-    <div class="cards">
-      <card-item v-for="item in 30" :key="item" class="card" />
+    <div class="items">
+      <card-item v-for="item in 30" :key="item" class="item" />
     </div>
 
     <div class="pagination">
@@ -15,22 +13,21 @@
 <script>
 import MiddlePagination from '@/components/MiddlePagination'
 import CardItem from '@/components/CardItem'
-import MainMenu from '@/components/MainMenu'
 
 export default {
   name: 'IndexPage',
-  components: { MainMenu, MiddlePagination, CardItem }
+  components: { MiddlePagination, CardItem }
 }
 </script>
 
 <style scoped>
-  .cards {
+  .items {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .card {
+  .item {
     margin: 10px !important;
   }
 

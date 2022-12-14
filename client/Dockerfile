@@ -25,6 +25,7 @@ COPY --chown=node:node . .
 RUN \
   rm -rf ./assets \
   && rm -rf ./components \
+  && rm -rf ./layouts \
   && rm -rf ./pages \
   && rm -rf ./store \
   && rm ./.eslintrc.js
