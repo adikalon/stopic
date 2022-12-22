@@ -96,7 +96,7 @@ export class PictureController {
       });
       const token: string = uid();
       const ptp = await this.pictureService.makePreview(imagePath, 150, false);
-      const psp = await this.pictureService.makePreview(imagePath, 300, false);
+      const psp = await this.pictureService.makePreview(imagePath, 320, false);
       const pbp = await this.pictureService.makePreview(imagePath, 800, true);
       const ptpMetadata = await this.pictureService.getMetadata(ptp);
       const pspMetadata = await this.pictureService.getMetadata(psp);
