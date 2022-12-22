@@ -1,12 +1,12 @@
 <template>
   <div class="card mb-3 detail-block">
     <div class="card-body">
-      <h5 class="card-title">
+      <h1 class="card-title main-header">
         This is header
-      </h5>
-      <h6 class="card-subtitle text-muted">
+      </h1>
+      <p class="card-subtitle text-muted content-desc">
         This is content
-      </h6>
+      </p>
     </div>
     <img src="http://images.localhost/4.jpg" width="800px" height="354px" class="img-image" alt="">
     <div class="card-body">
@@ -26,9 +26,9 @@
       <div class="tags-content">
         <span v-for="item in 20" :key="item" class="badge bg-info tag-button">Info</span>
       </div>
-      <h5 class="card-title similar-header">
+      <h3 class="card-title similar-header">
         Similar images
-      </h5>
+      </h3>
       <div class="similar-block">
         <div v-for="item in 30" :key="item" class="card border-primary similar-item">
           <img src="http://images.localhost/5.jpg" class="similar-image" alt="">
@@ -43,6 +43,17 @@
 </template>
 
 <style scoped>
+  .main-header {
+    font-size: 1.25rem;
+  }
+
+  .content-desc {
+    font-size: 1rem;
+    font-family: "Cabin Sketch",cursive;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
   .detail-block {
     width: fit-content;
     margin: 0 auto;
@@ -90,6 +101,7 @@
 
   .similar-header {
     margin-top: 30px;
+    font-size: 1.25rem;
   }
 
   .similar-block {

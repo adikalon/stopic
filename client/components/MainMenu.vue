@@ -2,7 +2,9 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Stopic - free pictures only</a>
+        <a class="navbar-brand" href="/">
+          <h2 class="main-header">Stopic - free pictures only</h2>
+        </a>
         <div class="navbar-navigation">
           <form class="d-flex">
             <input class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
@@ -95,6 +97,12 @@ export default {
 </script>
 
 <style scoped>
+  .main-header {
+    display: inline;
+    font-size: 1.25rem;
+    margin-bottom: 0;
+  }
+
   .navbar-navigation {
     width: 100%;
   }
