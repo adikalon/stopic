@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">
-          <h2 class="main-header">Stopic - free pictures only</h2>
+          <h2 class="main-header">{{ siteName }} - free pictures only</h2>
         </a>
         <div class="navbar-navigation">
           <form class="d-flex">
@@ -77,6 +77,7 @@
 <script>
 export default {
   data: () => ({
+    siteName: process.env.appName || '',
     advSearch: false,
     tagsModal: false
   }),

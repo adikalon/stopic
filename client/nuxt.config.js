@@ -4,7 +4,7 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'stopic',
+    title: process.env.APP_NAME || '',
     htmlAttrs: {
       lang: 'en'
     },
@@ -55,5 +55,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  env: {
+    appName: process.env.APP_NAME || ''
   }
 }

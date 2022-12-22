@@ -42,6 +42,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  head: {
+    title: `Img header - ${process.env.appName}`
+  }
+}
+</script>
+
 <style scoped>
   .main-header {
     font-size: 1.25rem;
