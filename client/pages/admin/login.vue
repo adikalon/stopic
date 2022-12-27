@@ -19,6 +19,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  head: {
+    title: `Login - ${process.env.appName}`
+  }
+}
+</script>
+
 <style scoped>
   .login-block {
     max-width: 450px;
