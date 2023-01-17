@@ -8,12 +8,6 @@
         <div class="navbar-navigation">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Images</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Tags</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#">Logout</a>
             </li>
           </ul>
