@@ -23,20 +23,20 @@
       <div class="input-row">
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Title</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Title</label> - <span>{{ title.length }}</span>
+            <input v-model="title" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Header</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Header</label> - <span>{{ header.length }}</span>
+            <input v-model="header" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">URL</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">URL</label> - <span>{{ url.length }}</span>
+            <input v-model="url" type="text" class="form-control">
           </div>
         </div>
       </div>
@@ -44,14 +44,14 @@
       <div class="input-desc-row">
         <div class="two-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Description</label>
-            <textarea class="form-control" rows="2" />
+            <label class="form-label mt-4">Description</label> - <span>{{ description.length }}</span>
+            <textarea v-model="description" class="form-control" rows="2" />
           </div>
         </div>
         <div class="two-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Content</label>
-            <textarea class="form-control" rows="2" />
+            <label class="form-label mt-4">Content</label> - <span>{{ content.length }}</span>
+            <textarea v-model="content" class="form-control" rows="2" />
           </div>
         </div>
       </div>
@@ -59,41 +59,20 @@
       <div class="input-row">
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Name (big)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Name (big)</label> - <span>{{ nameBig.length }}</span>
+            <input v-model="nameBig" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Alt (big)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Alt (big)</label> - <span>{{ altBig.length }}</span>
+            <input v-model="altBig" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Title (big)</label>
-            <input type="text" class="form-control">
-          </div>
-        </div>
-      </div>
-
-      <div class="input-row">
-        <div class="three-field-item">
-          <div class="form-group">
-            <label class="form-label mt-4">Name (small)</label>
-            <input type="text" class="form-control">
-          </div>
-        </div>
-        <div class="three-field-item">
-          <div class="form-group">
-            <label class="form-label mt-4">Alt (small)</label>
-            <input type="text" class="form-control">
-          </div>
-        </div>
-        <div class="three-field-item">
-          <div class="form-group">
-            <label class="form-label mt-4">Title (small)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Title (big)</label> - <span>{{ titleBig.length }}</span>
+            <input v-model="titleBig" type="text" class="form-control">
           </div>
         </div>
       </div>
@@ -101,20 +80,41 @@
       <div class="input-row">
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Name (tiny)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Name (small)</label> - <span>{{ nameSmall.length }}</span>
+            <input v-model="nameSmall" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Alt (tiny)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Alt (small)</label> - <span>{{ altSmall.length }}</span>
+            <input v-model="altSmall" type="text" class="form-control">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
-            <label class="form-label mt-4">Title (tiny)</label>
-            <input type="text" class="form-control">
+            <label class="form-label mt-4">Title (small)</label> - <span>{{ titleSmall.length }}</span>
+            <input v-model="titleSmall" type="text" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="three-field-item">
+          <div class="form-group">
+            <label class="form-label mt-4">Name (tiny)</label> - <span>{{ nameTiny.length }}</span>
+            <input v-model="nameTiny" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="three-field-item">
+          <div class="form-group">
+            <label class="form-label mt-4">Alt (tiny)</label> - <span>{{ altTiny.length }}</span>
+            <input v-model="altTiny" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="three-field-item">
+          <div class="form-group">
+            <label class="form-label mt-4">Title (tiny)</label> - <span>{{ titleTiny.length }}</span>
+            <input v-model="titleTiny" type="text" class="form-control">
           </div>
         </div>
       </div>
@@ -142,6 +142,24 @@
 <script>
 export default {
   layout: 'admin',
+  data () {
+    return {
+      title: '',
+      header: '',
+      url: '',
+      description: '',
+      content: '',
+      nameBig: '',
+      altBig: '',
+      titleBig: '',
+      nameSmall: '',
+      altSmall: '',
+      titleSmall: '',
+      nameTiny: '',
+      altTiny: '',
+      titleTiny: ''
+    }
+  },
   head: {
     title: `Admin - ${process.env.appName}`
   }
