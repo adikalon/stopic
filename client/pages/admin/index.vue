@@ -24,7 +24,7 @@
         <div class="three-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Title</label> - <span>{{ title.length }}</span>
-            <input v-model="title" type="text" class="form-control">
+            <input v-model="title" type="text" class="form-control" @input="changeTitle">
           </div>
         </div>
         <div class="three-field-item">
@@ -45,7 +45,7 @@
         <div class="two-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Description</label> - <span>{{ description.length }}</span>
-            <textarea v-model="description" class="form-control" rows="2" />
+            <textarea v-model="description" class="form-control" rows="2" @input="content = description" />
           </div>
         </div>
         <div class="two-field-item">
@@ -60,19 +60,19 @@
         <div class="three-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Name (big)</label> - <span>{{ nameBig.length }}</span>
-            <input v-model="nameBig" type="text" class="form-control">
+            <input v-model="nameBig" type="text" class="form-control" @input="nameSmall = nameTiny = nameBig">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Alt (big)</label> - <span>{{ altBig.length }}</span>
-            <input v-model="altBig" type="text" class="form-control">
+            <input v-model="altBig" type="text" class="form-control" @input="altSmall = altTiny = altBig">
           </div>
         </div>
         <div class="three-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Title (big)</label> - <span>{{ titleBig.length }}</span>
-            <input v-model="titleBig" type="text" class="form-control">
+            <input v-model="titleBig" type="text" class="form-control" @input="titleSmall = titleTiny = titleBig">
           </div>
         </div>
       </div>
@@ -162,6 +162,13 @@ export default {
   },
   head: {
     title: `Admin - ${process.env.appName}`
+  },
+  methods: {
+    changeTitle () {
+      this.header = this.title
+      this.url = this.title.toLowerCase().replace(/[^\d\w-]/g, '-')
+        .replace(/-{2,}/g, '-').replace(/^-/g, '').replace(/-$/g, '')
+    }
   }
 }
 </script>
