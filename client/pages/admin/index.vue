@@ -129,6 +129,24 @@
       </div>
 
       <div class="publish-button">
+        <div v-if="error" class="alert alert-dismissible alert-danger">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" @click="error = ''" />
+          <h4 class="alert-heading">
+            Error!
+          </h4>
+          <p class="mb-0">
+            {{ error }}
+          </p>
+        </div>
+        <div v-if="success" class="alert alert-dismissible alert-success">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" @click="success = ''" />
+          <h4 class="alert-heading">
+            Success!
+          </h4>
+          <p class="mb-0">
+            {{ success }}
+          </p>
+        </div>
         <div class="d-grid gap-2">
           <button class="btn btn-lg btn-primary" type="button">
             Publish
@@ -144,6 +162,8 @@ export default {
   layout: 'admin',
   data () {
     return {
+      error: '',
+      success: '',
       title: '',
       header: '',
       url: '',
