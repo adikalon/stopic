@@ -5,16 +5,20 @@
         Upload image
       </h5>
 
+      <div v-if="src" class="image-block">
+        <img class="uploaded-image" :src="src">
+      </div>
+
       <div class="input-row">
         <div>
           <div class="form-group">
             <label class="form-label mt-4">Image</label>
-            <input class="form-control" type="file">
+            <input class="form-control" type="file" accept="image/jpeg,image/png" @change="imageUpload($event)">
           </div>
         </div>
         <div>
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" checked="">
+            <input v-model="active" class="form-check-input" type="checkbox" :checked="active">
             <label class="form-check-label">Active</label>
           </div>
         </div>
@@ -123,7 +127,7 @@
         <div class="desc-item">
           <div class="form-group">
             <label class="form-label mt-4">Tags</label>
-            <textarea class="form-control" rows="1" />
+            <textarea v-model="tags" class="form-control" rows="1" />
           </div>
         </div>
       </div>
@@ -148,7 +152,7 @@
           </p>
         </div>
         <div class="d-grid gap-2">
-          <button class="btn btn-lg btn-primary" type="button">
+          <button class="btn btn-lg btn-primary" type="button" @click="publish">
             Publish
           </button>
         </div>
@@ -164,6 +168,9 @@ export default {
     return {
       error: '',
       success: '',
+      image: '',
+      src: '',
+      active: true,
       title: '',
       header: '',
       url: '',
@@ -177,7 +184,8 @@ export default {
       titleSmall: '',
       nameTiny: '',
       altTiny: '',
-      titleTiny: ''
+      titleTiny: '',
+      tags: ''
     }
   },
   head: {
@@ -188,12 +196,32 @@ export default {
       this.header = this.title
       this.url = this.title.toLowerCase().replace(/[^\d\w-]/g, '-')
         .replace(/-{2,}/g, '-').replace(/^-/g, '').replace(/-$/g, '')
+    },
+
+    imageUpload (event) {
+      this.image = event.target.files[0]
+      const reader = new FileReader()
+      reader.onload = e => (this.src = e.target.result)
+      reader.readAsDataURL(this.image)
+    },
+
+    publish () {
+      //
     }
   }
 }
 </script>
 
 <style scoped>
+  .image-block {
+    display: flex;
+    justify-content: center;
+  }
+
+  .uploaded-image {
+    max-width: 100%;
+  }
+
   .images-block {
     width: fit-content;
     min-width: 90%;
