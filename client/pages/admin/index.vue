@@ -165,6 +165,7 @@
 <script>
 export default {
   layout: 'admin',
+  middleware: 'auth',
   data () {
     return {
       preload: false,
