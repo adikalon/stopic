@@ -8,7 +8,7 @@
         <div class="navbar-navigation">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Logout</a>
+              <a class="nav-link" href="#" @click.prevent="logout">Logout</a>
             </li>
           </ul>
         </div>
@@ -21,7 +21,13 @@
 export default {
   data: () => ({
     siteName: process.env.appName || ''
-  })
+  }),
+  methods: {
+    logout () {
+      this.$cookies.remove('auth')
+      this.$router.push('/admin/login')
+    }
+  }
 }
 </script>
 

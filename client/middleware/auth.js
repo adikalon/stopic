@@ -1,7 +1,5 @@
 export default async function (context) {
-  const auth = context.req.headers.cookie.replaceAll('; ', ';').split(';').filter((cookie) => {
-    return /^auth/.test(cookie)
-  })[0]?.replace('auth=', '')
+  const auth = context.app.$cookies.get('auth')
 
   if (!auth) {
     return context.redirect('/admin/login')
