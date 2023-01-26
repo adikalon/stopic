@@ -13,7 +13,7 @@
         <div>
           <div class="form-group">
             <label class="form-label mt-4">Image</label>
-            <input class="form-control" type="file" accept="image/jpeg,image/png" @change="imageUpload($event)">
+            <input ref="image" class="form-control" type="file" accept="image/jpeg,image/png" @change="imageUpload($event)">
           </div>
         </div>
         <div>
@@ -152,7 +152,8 @@
           </p>
         </div>
         <div class="d-grid gap-2">
-          <button class="btn btn-lg btn-primary" type="button" @click="publish">
+          <button class="btn btn-lg btn-primary" type="button" :disabled="preload" @click="publish">
+            <span v-if="preload" class="spinner-border spinner-border-sm" />
             Publish
           </button>
         </div>
@@ -166,6 +167,7 @@ export default {
   layout: 'admin',
   data () {
     return {
+      preload: false,
       error: '',
       success: '',
       image: '',
@@ -206,7 +208,61 @@ export default {
     },
 
     publish () {
-      //
+      if (this.preload) {
+        return
+      }
+
+      this.preload = true
+      const formData = new FormData()
+
+      formData.append('image', this.image)
+      formData.append('active', this.active)
+      formData.append('title', this.title)
+      formData.append('header', this.header)
+      formData.append('url', this.url)
+      formData.append('description', this.description)
+      formData.append('content', this.content)
+      formData.append('bigName', this.nameBig)
+      formData.append('bigAlt', this.altBig)
+      formData.append('bigTitle', this.titleBig)
+      formData.append('smallName', this.nameSmall)
+      formData.append('smallAlt', this.altSmall)
+      formData.append('smallTitle', this.titleSmall)
+      formData.append('tinyName', this.nameTiny)
+      formData.append('tinyAlt', this.altTiny)
+      formData.append('tinyTitle', this.titleTiny)
+      // formData.append('tags', this.tags)
+
+      this.$axios.post(`${process.env.apiUrl}/api/picture`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(() => {
+        this.success = 'Image uploaded successfully'
+        this.$refs.image.value = null
+        this.image = ''
+        this.src = ''
+        this.active = true
+        this.title = ''
+        this.header = ''
+        this.url = ''
+        this.description = ''
+        this.content = ''
+        this.nameBig = ''
+        this.altBig = ''
+        this.titleBig = ''
+        this.nameSmall = ''
+        this.altSmall = ''
+        this.titleSmall = ''
+        this.nameTiny = ''
+        this.altTiny = ''
+        this.titleTiny = ''
+        this.tags = ''
+      }).catch((err) => {
+        this.error = err.response.data
+      }).finally(() => {
+        this.preload = false
+      })
     }
   }
 }

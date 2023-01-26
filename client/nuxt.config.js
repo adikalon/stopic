@@ -58,6 +58,7 @@ export default {
   },
 
   env: {
-    appName: process.env.APP_NAME || ''
+    appName: process.env.APP_NAME || '',
+    apiUrl: (process.env.APP_URL || '').replace(/\/$/, '')
   }
 }
