@@ -64,7 +64,7 @@
         <div class="three-field-item">
           <div class="form-group">
             <label class="form-label mt-4">Name (big)</label> - <span>{{ nameBig.length }}</span>
-            <input v-model="nameBig" type="text" class="form-control" @input="nameSmall = nameTiny = nameBig">
+            <input v-model="nameBig" type="text" class="form-control" @input="picturesNamed">
           </div>
         </div>
         <div class="three-field-item">
@@ -201,6 +201,11 @@ export default {
         .replace(/-{2,}/g, '-').replace(/^-/g, '').replace(/-$/g, '')
     },
 
+    picturesNamed () {
+      this.nameSmall = `${this.nameBig}-small`
+      this.nameTiny = `${this.nameBig}-tiny`
+    },
+
     imageUpload (event) {
       this.image = event.target.files[0]
       const reader = new FileReader()
@@ -214,6 +219,7 @@ export default {
       }
 
       this.preload = true
+      const auth = this.$cookies.get('auth')
       const formData = new FormData()
 
       formData.append('image', this.image)
@@ -232,14 +238,23 @@ export default {
       formData.append('tinyName', this.nameTiny)
       formData.append('tinyAlt', this.altTiny)
       formData.append('tinyTitle', this.titleTiny)
-      // formData.append('tags', this.tags)
+
+      this.tags.split(',').forEach((t) => {
+        const tag = t.trim().toLowerCase()
+
+        if (tag) {
+          formData.append('tags[]', tag)
+        }
+      })
 
       this.$axios.post(`${process.env.apiUrl}/api/picture`, formData, {
         headers: {
+          Authorization: auth,
           'Content-Type': 'multipart/form-data'
         }
-      }).then(() => {
-        this.success = 'Image uploaded successfully'
+      }).then((res) => {
+        this.error = ''
+        this.success = `Link: ${res.headers.location}`
         this.$refs.image.value = null
         this.image = ''
         this.src = ''
