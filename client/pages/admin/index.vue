@@ -199,6 +199,17 @@ export default {
       this.header = this.title
       this.url = this.title.toLowerCase().replace(/[^\d\w-]/g, '-')
         .replace(/-{2,}/g, '-').replace(/^-/g, '').replace(/-$/g, '')
+      this.description = this.title
+      this.content = this.title
+      this.nameBig = this.url
+      this.altBig = this.title
+      this.titleBig = this.title
+      this.nameSmall = `${this.url}-small`
+      this.altSmall = this.title
+      this.titleSmall = this.title
+      this.nameTiny = `${this.url}-tiny`
+      this.altTiny = this.title
+      this.titleTiny = this.title
     },
 
     picturesNamed () {
