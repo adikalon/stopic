@@ -5,13 +5,13 @@
         Enter access key
       </h5>
       <div class="form-group has-danger key-field">
-        <input type="text" placeholder="Access key" class="form-control is-invalid">
+        <input v-model="key" type="text" placeholder="Access key" class="form-control" :class="{ 'is-invalid': error }">
         <div class="invalid-feedback">
-          Sorry, that username's taken. Try another?
+          {{ error }}
         </div>
       </div>
       <div class="d-grid gap-2 key-button">
-        <button class="btn btn-lg btn-primary" type="button">
+        <button class="btn btn-lg btn-primary" type="button" @click="login">
           Login
         </button>
       </div>
@@ -21,8 +21,30 @@
 
 <script>
 export default {
+  data () {
+    return {
+      error: '',
+      key: ''
+    }
+  },
   head: {
     title: `Login - ${process.env.appName}`
+  },
+  methods: {
+    login () {
+      const auth = `Bearer ${this.key}`
+
+      this.$axios.post(`${process.env.apiUrl}/api/visitor/auth`, null, {
+        headers: {
+          Authorization: auth
+        }
+      }).then(() => {
+        this.$cookies.set('auth', auth)
+        this.$router.push('/admin')
+      }).catch((err) => {
+        this.error = err.response.data
+      })
+    }
   }
 }
 </script>
