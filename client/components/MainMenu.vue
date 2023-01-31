@@ -68,7 +68,7 @@
     <div v-if="tagsModal" class="tags-modal" data-tags="close" @click="closeTags">
       <div class="tags-content card border-primary mb-3">
         <button type="button" class="btn-close tags-close" data-tags="close" />
-        <span v-for="item in 500" :key="item" class="badge bg-info tag-button">Info</span>
+        <span v-for="tag in tags" :key="tag.id" class="badge bg-info tag-button">{{ tag.name }}</span>
       </div>
     </div>
   </div>
@@ -79,8 +79,18 @@ export default {
   data: () => ({
     siteName: process.env.appName || '',
     advSearch: false,
-    tagsModal: false
+    tagsModal: false,
+    tags: []
   }),
+  async fetch () {
+    let host = 'http://server:3000'
+
+    if (process.client) {
+      host = process.env.apiUrl
+    }
+
+    this.tags = await fetch(`${host}/api/tag/popular`).then(res => res.json())
+  },
   methods: {
     toggleAdvSerach () {
       this.advSearch = !this.advSearch

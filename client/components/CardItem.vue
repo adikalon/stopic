@@ -1,9 +1,34 @@
 <template>
-  <div class="card border-primary img-block">
-    <img src="http://images.localhost/3.jpg" class="img-image" alt="">
-    <span class="img-size">1366 x 830</span>
-  </div>
+  <NuxtLink :to="`/${picture.url}-${picture.id}`">
+    <div class="card border-primary img-block">
+      <img
+        :src="`${host}/api/picture/${picture.id}/preview/${picture.previewName}.webp`"
+        class="img-image"
+        :alt="picture.previewAlt"
+        :title="picture.previewTitle"
+      >
+      <span class="img-size">{{ picture.width }} x {{ picture.height }}</span>
+    </div>
+  </NuxtLink>
 </template>
+
+<script>
+export default {
+  props: {
+    picture: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  data () {
+    return {
+      host: process.env.apiUrl
+    }
+  }
+}
+</script>
 
 <style scoped>
   .img-block {

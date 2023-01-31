@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="items">
-      <card-item v-for="item in 30" :key="item" class="item" />
+      <card-item v-for="picture in pictures" :key="picture.id" :picture="picture" class="item" />
     </div>
 
     <div class="pagination">
@@ -16,7 +16,23 @@ import CardItem from '@/components/CardItem'
 
 export default {
   name: 'IndexPage',
-  components: { MiddlePagination, CardItem }
+  components: { MiddlePagination, CardItem },
+
+  async asyncData (context) {
+    let host = 'http://server:3000'
+
+    if (process.client) {
+      host = process.env.apiUrl
+    }
+
+    const pic = await context.app.$axios.get(`${host}/api/picture`)
+
+    return {
+      pictures: pic.data,
+      pagLimit: pic.headers['pagination-limit'],
+      pagTotal: pic.headers['pagination-total']
+    }
+  }
 }
 </script>
 
