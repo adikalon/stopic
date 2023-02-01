@@ -8,12 +8,46 @@
           </h2>
         </NuxtLink>
         <div class="navbar-navigation">
-          <form class="d-flex" @submit.prevent="filter">
-            <input v-model="search" class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
-            <input v-if="advSearch" v-model="minWidth" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Width">
-            <input v-if="advSearch" v-model="minHeight" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Height">
-            <input v-if="advSearch" v-model="maxWidth" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Width">
-            <input v-if="advSearch" v-model="maxHeight" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Height">
+          <form class="d-flex" method="GET" @submit.prevent="filter">
+            <input
+              v-model="search"
+              name="search"
+              class="form-control me-sm-2 search-field"
+              type="text"
+              placeholder="What are we looking for?"
+            >
+            <input
+              v-if="advSearch"
+              v-model="minWidth"
+              name="minWidth"
+              class="form-control me-sm-2 search-field addition-search"
+              type="text"
+              placeholder="Min Width"
+            >
+            <input
+              v-if="advSearch"
+              v-model="minHeight"
+              name="minHeight"
+              class="form-control me-sm-2 search-field addition-search"
+              type="text"
+              placeholder="Min Height"
+            >
+            <input
+              v-if="advSearch"
+              v-model="maxWidth"
+              name="maxWidth"
+              class="form-control me-sm-2 search-field addition-search"
+              type="text"
+              placeholder="Max Width"
+            >
+            <input
+              v-if="advSearch"
+              v-model="maxHeight"
+              name="maxHeight"
+              class="form-control me-sm-2 search-field addition-search"
+              type="text"
+              placeholder="Max Height"
+            >
             <div class="btn-group navbar-buttons" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-secondary" @click="toggleAdvSerach">
                 <svg

@@ -1,6 +1,6 @@
 <template>
   <div class="card mb-3 images-block">
-    <div class="card-body">
+    <form class="card-body" @submit.prevent="publish">
       <h5 class="card-title">
         Upload image
       </h5>
@@ -152,13 +152,13 @@
           </p>
         </div>
         <div class="d-grid gap-2">
-          <button class="btn btn-lg btn-primary" type="button" :disabled="preload" @click="publish">
+          <button class="btn btn-lg btn-primary" type="submit" :disabled="preload">
             <span v-if="preload" class="spinner-border spinner-border-sm" />
             Publish
           </button>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 

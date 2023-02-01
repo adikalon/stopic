@@ -2,9 +2,11 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <h2 class="main-header">{{ siteName }} - free pictures only</h2>
-        </a>
+        <NuxtLink class="navbar-brand" to="/">
+          <h2 class="main-header">
+            {{ siteName }} - free pictures only
+          </h2>
+        </NuxtLink>
         <div class="navbar-navigation">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">

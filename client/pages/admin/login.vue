@@ -4,17 +4,19 @@
       <h5 class="card-title">
         Enter access key
       </h5>
-      <div class="form-group has-danger key-field">
-        <input v-model="key" type="text" placeholder="Access key" class="form-control" :class="{ 'is-invalid': error }">
-        <div class="invalid-feedback">
-          {{ error }}
+      <form @submit.prevent="login">
+        <div class="form-group has-danger key-field">
+          <input v-model="key" type="text" placeholder="Access key" class="form-control" :class="{ 'is-invalid': error }">
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
         </div>
-      </div>
-      <div class="d-grid gap-2 key-button">
-        <button class="btn btn-lg btn-primary" type="button" @click="login">
-          Login
-        </button>
-      </div>
+        <div class="d-grid gap-2 key-button">
+          <button class="btn btn-lg btn-primary" type="submit">
+            Login
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
