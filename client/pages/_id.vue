@@ -2,50 +2,128 @@
   <div class="card mb-3 detail-block">
     <div class="card-body">
       <h1 class="card-title main-header">
-        This is header
+        {{ picture.header }}
       </h1>
       <p class="card-subtitle text-muted content-desc">
-        This is content
+        {{ picture.content }}
       </p>
     </div>
-    <img src="http://images.localhost/4.jpg" width="800px" height="354px" class="img-image" alt="">
+    <img
+      :src="`${host}/api/picture/${picture.id}/preview/${picture.previewName}.webp`"
+      :width="`${picture.previewWidth}px`"
+      :height="`${picture.previewHeight}px`"
+      class="img-image"
+      :alt="picture.previewAlt"
+      :title="picture.previewTitle"
+    >
     <div class="card-body">
       <ul class="card-properties">
-        <li><b>Width: </b> 1036px</li>
-        <li><b>Height: </b> 840px</li>
-        <li><b>Size: </b> 136kb</li>
-        <li><b>Mime: </b> jpeg</li>
-        <li><b>Views: </b> 136</li>
-        <li><b>Downloads: </b> 15</li>
+        <li><b>Width: </b> {{ picture.width }}px</li>
+        <li><b>Height: </b> {{ picture.height }}px</li>
+        <li><b>Size: </b> {{ size(picture.size) }}</li>
+        <li><b>Mime: </b> {{ mime(picture.mime) }}</li>
+        <li><b>Views: </b> {{ picture.views }}</li>
+        <li><b>Downloads: </b> {{ picture.downloads }}</li>
       </ul>
       <div class="d-grid">
-        <button class="btn btn-lg btn-primary" type="button">
+        <a class="btn btn-lg btn-primary" :href="picture.link">
           Download for free after watching ads
-        </button>
+        </a>
       </div>
       <div class="tags-content">
-        <span v-for="item in 20" :key="item" class="badge bg-info tag-button">Info</span>
+        <NuxtLink
+          v-for="tag in picture.tags"
+          :key="tag.id"
+          class="badge bg-info tag-button tag-link"
+          :to="`/?tag=${tag.id}`"
+        >
+          {{ tag.name }}
+        </NuxtLink>
       </div>
-      <h3 class="card-title similar-header">
-        Similar images
-      </h3>
-      <div class="similar-block">
-        <div v-for="item in 30" :key="item" class="card border-primary similar-item">
-          <img src="http://images.localhost/5.jpg" class="similar-image" alt="">
-          <span class="similar-size">1366 x 830</span>
+      <div v-if="similar.length">
+        <h3 class="card-title similar-header">
+          Similar images
+        </h3>
+        <div class="similar-block">
+          <div v-for="sim in similar" :key="sim.id" class="card border-primary similar-item">
+            <NuxtLink :to="`/${sim.url}-${sim.id}`">
+              <img
+                :src="`${host}/api/picture/${sim.id}/preview/${sim.previewName}.webp`"
+                :width="`${sim.previewWidth}px`"
+                :height="`${sim.previewHeight}px`"
+                class="similar-image"
+                :alt="sim.previewAlt"
+                :title="sim.previewTitle"
+              >
+              <span class="similar-size">{{ sim.width }} x {{ sim.height }}</span>
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>
-    <div class="card-footer text-muted date-block">
-      Posted at: 20.12.2022 23:39:04
-    </div>
+    <time class="card-footer text-muted date-block" pubdate :datetime="picture.created">
+      Posted at: {{ new Date(picture.created).toLocaleString() }}
+    </time>
   </div>
 </template>
 
 <script>
 export default {
-  head: {
-    title: `Img header - ${process.env.appName}`
+  async asyncData ({ route, error, app }) {
+    const params = route.params?.id.match(/^(?<url>.+)-(?<id>\d+)$/)
+
+    if (!params) {
+      return error({ statusCode: 404, message: 'Page not found' })
+    }
+    let host = 'http://server:3000'
+
+    if (process.client) {
+      host = process.env.apiUrl
+    }
+
+    try {
+      const pic = await app.$axios.get(`${host}/api/picture/${params.groups.id}`)
+      const sim = await app.$axios.get(`${host}/api/picture/recommended/${params.groups.id}`)
+      return {
+        picture: pic.data,
+        similar: sim.data
+      }
+    } catch (err) {
+      return error({ statusCode: err.response.status, message: err.response.data })
+    }
+  },
+  data () {
+    return {
+      host: process.env.apiUrl
+    }
+  },
+  head () {
+    return {
+      title: `${this.picture.title} - ${process.env.appName}`,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.picture.description
+        }
+      ]
+    }
+  },
+  methods: {
+    mime (full) {
+      return full.replace('image/', '')
+    },
+    size (bytes) {
+      if (!+bytes) {
+        return '0 Bytes'
+      }
+
+      const k = 1024
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
+    }
   }
 }
 </script>
@@ -145,5 +223,14 @@ export default {
     color: #fff;
     background-color: rgba(39, 36, 36, 0.8);
     padding: 10px;
+  }
+
+  .tag-link {
+    text-decoration: none;
+  }
+
+  .tag-link:hover {
+    color: #fff;
+    background-color: #158B9D !important;
   }
 </style>

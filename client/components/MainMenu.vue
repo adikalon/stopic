@@ -2,9 +2,11 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <h2 class="main-header">{{ siteName }} - free pictures only</h2>
-        </a>
+        <NuxtLink class="navbar-brand" to="/">
+          <h2 class="main-header">
+            {{ siteName }} - free pictures only
+          </h2>
+        </NuxtLink>
         <div class="navbar-navigation">
           <form class="d-flex">
             <input class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
@@ -68,7 +70,14 @@
     <div v-if="tagsModal" class="tags-modal" data-tags="close" @click="closeTags">
       <div class="tags-content card border-primary mb-3">
         <button type="button" class="btn-close tags-close" data-tags="close" />
-        <span v-for="tag in tags" :key="tag.id" class="badge bg-info tag-button">{{ tag.name }}</span>
+        <NuxtLink
+          v-for="tag in tags"
+          :key="tag.id"
+          class="badge bg-info tag-button tag-link"
+          :to="`/?tag=${tag.id}`"
+        >
+          {{ tag.name }}
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -123,7 +132,6 @@ export default {
   }
 
   .tags-modal {
-    /* display: none; */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -185,5 +193,14 @@ export default {
     .navbar-buttons {
       display: flex;
     }
+  }
+
+  .tag-link {
+    text-decoration: none;
+  }
+
+  .tag-link:hover {
+    color: #fff;
+    background-color: #158B9D !important;
   }
 </style>

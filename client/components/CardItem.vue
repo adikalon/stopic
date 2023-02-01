@@ -3,6 +3,8 @@
     <div class="card border-primary img-block">
       <img
         :src="`${host}/api/picture/${picture.id}/preview/${picture.previewName}.webp`"
+        :width="`${picture.previewWidth}px`"
+        :height="`${picture.previewHeight}px`"
         class="img-image"
         :alt="picture.previewAlt"
         :title="picture.previewTitle"
