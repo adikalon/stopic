@@ -25,14 +25,47 @@ export default {
       host = process.env.apiUrl
     }
 
-    const pic = await context.app.$axios.get(`${host}/api/picture`)
+    const params = {}
+
+    if (context.route.query.page) {
+      params.page = context.route.query.page
+    }
+
+    if (context.route.query.tag) {
+      params.tags = context.route.query.tag
+    }
+
+    if (context.route.query.search) {
+      params.search = context.route.query.search
+    }
+
+    if (context.route.query.minWidth) {
+      params.fromWidth = context.route.query.minWidth
+    }
+
+    if (context.route.query.minHeight) {
+      params.fromHeight = context.route.query.minHeight
+    }
+
+    if (context.route.query.maxWidth) {
+      params.toWidth = context.route.query.maxWidth
+    }
+
+    if (context.route.query.maxHeight) {
+      params.toHeight = context.route.query.maxHeight
+    }
+
+    const pic = await context.app.$axios.get(`${host}/api/picture`, { params })
 
     return {
       pictures: pic.data,
       pagLimit: pic.headers['pagination-limit'],
       pagTotal: pic.headers['pagination-total']
     }
-  }
+  },
+  watchQuery: [
+    'page', 'tag', 'search', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'
+  ]
 }
 </script>
 

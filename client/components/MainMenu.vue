@@ -8,7 +8,7 @@
           </h2>
         </NuxtLink>
         <div class="navbar-navigation">
-          <form class="d-flex">
+          <form class="d-flex" @submit.prevent="filter">
             <input v-model="search" class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
             <input v-if="advSearch" v-model="minWidth" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Width">
             <input v-if="advSearch" v-model="minHeight" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Height">
@@ -39,7 +39,7 @@
                   <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" />
                 </svg>
               </button>
-              <button type="button" class="btn btn-secondary" @click="filter">
+              <button type="submit" class="btn btn-secondary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
