@@ -4,8 +4,8 @@
       <card-item v-for="picture in pictures" :key="picture.id" :picture="picture" class="item" />
     </div>
 
-    <div class="pagination">
-      <middle-pagination />
+    <div v-if="pages > 1" class="pagination">
+      <middle-pagination :pages="pages" />
     </div>
   </div>
 </template>
@@ -59,8 +59,7 @@ export default {
 
     return {
       pictures: pic.data,
-      pagLimit: pic.headers['pagination-limit'],
-      pagTotal: pic.headers['pagination-total']
+      pages: Math.ceil(+pic.headers['pagination-total'] / +pic.headers['pagination-limit'])
     }
   },
   watchQuery: [
@@ -83,5 +82,6 @@ export default {
   .pagination {
     display: flex;
     justify-content: center;
+    margin-top: 5px;
   }
 </style>

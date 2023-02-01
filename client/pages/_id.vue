@@ -143,8 +143,8 @@ export default {
   .detail-block {
     width: fit-content;
     margin: 0 auto;
-    margin-top: 30px;
-    margin-bottom: 0 !important;
+    margin-top: 10px;
+    margin-bottom: 10px !important;
   }
 
   .date-block {

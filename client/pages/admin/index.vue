@@ -309,8 +309,8 @@ export default {
     width: fit-content;
     min-width: 90%;
     margin: 0 auto;
-    margin-top: 30px;
-    margin-bottom: 30px !important;
+    margin-top: 10px;
+    margin-bottom: 10px !important;
   }
 
   .input-row {
