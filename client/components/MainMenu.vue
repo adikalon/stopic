@@ -9,11 +9,11 @@
         </NuxtLink>
         <div class="navbar-navigation">
           <form class="d-flex">
-            <input class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
-            <input v-if="advSearch" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Width">
-            <input v-if="advSearch" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Height">
-            <input v-if="advSearch" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Width">
-            <input v-if="advSearch" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Height">
+            <input v-model="search" class="form-control me-sm-2 search-field" type="text" placeholder="What are we looking for?">
+            <input v-if="advSearch" v-model="minWidth" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Width">
+            <input v-if="advSearch" v-model="minHeight" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Min Height">
+            <input v-if="advSearch" v-model="maxWidth" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Width">
+            <input v-if="advSearch" v-model="maxHeight" class="form-control me-sm-2 search-field addition-search" type="text" placeholder="Max Height">
             <div class="btn-group navbar-buttons" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-secondary" @click="toggleAdvSerach">
                 <svg
@@ -39,7 +39,7 @@
                   <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" />
                 </svg>
               </button>
-              <button type="button" class="btn btn-secondary">
+              <button type="button" class="btn btn-secondary" @click="filter">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -73,6 +73,7 @@
         <NuxtLink
           v-for="tag in tags"
           :key="tag.id"
+          data-tags="close"
           class="badge bg-info tag-button tag-link"
           :to="`/?tag=${tag.id}`"
         >
@@ -89,7 +90,12 @@ export default {
     siteName: process.env.appName || '',
     advSearch: false,
     tagsModal: false,
-    tags: []
+    tags: [],
+    search: '',
+    minWidth: null,
+    minHeight: null,
+    maxWidth: null,
+    maxHeight: null
   }),
   async fetch () {
     let host = 'http://server:3000'
@@ -103,6 +109,13 @@ export default {
   methods: {
     toggleAdvSerach () {
       this.advSearch = !this.advSearch
+
+      if (!this.advSearch) {
+        this.minWidth = null
+        this.minHeight = null
+        this.maxWidth = null
+        this.maxHeight = null
+      }
     },
     showTags () {
       this.tagsModal = true
@@ -111,6 +124,31 @@ export default {
       if (e.target.dataset.tags === 'close') {
         this.tagsModal = false
       }
+    },
+    filter () {
+      const query = new URLSearchParams()
+
+      if (this.search) {
+        query.append('search', this.search)
+      }
+
+      if (this.minWidth) {
+        query.append('minWidth', this.minWidth)
+      }
+
+      if (this.minHeight) {
+        query.append('minHeight', this.minHeight)
+      }
+
+      if (this.maxWidth) {
+        query.append('maxWidth', this.maxWidth)
+      }
+
+      if (this.maxHeight) {
+        query.append('maxHeight', this.maxHeight)
+      }
+
+      this.$router.push(`/?${query.toString()}`)
     }
   }
 }
