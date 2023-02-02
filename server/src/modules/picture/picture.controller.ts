@@ -95,9 +95,24 @@ export class PictureController {
         dictionary: 'alphanum_lower',
       });
       const token: string = uid();
-      const ptp = await this.pictureService.makePreview(imagePath, 150, false);
-      const psp = await this.pictureService.makePreview(imagePath, 320, false);
-      const pbp = await this.pictureService.makePreview(imagePath, 800, true);
+      const ptp = await this.pictureService.makePreview(
+        imagePath,
+        150,
+        false,
+        'cover',
+      );
+      const psp = await this.pictureService.makePreview(
+        imagePath,
+        320,
+        false,
+        'cover',
+      );
+      const pbp = await this.pictureService.makePreview(
+        imagePath,
+        800,
+        true,
+        'inside',
+      );
       const ptpMetadata = await this.pictureService.getMetadata(ptp);
       const pspMetadata = await this.pictureService.getMetadata(psp);
       const pbpMetadata = await this.pictureService.getMetadata(pbp);

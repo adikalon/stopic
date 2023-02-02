@@ -16,6 +16,7 @@ export class PictureService {
     imagePath: string,
     maxSize: number,
     watermark: boolean,
+    fit: keyof sharp.FitEnum | undefined,
   ): Promise<string> {
     const uid = new ShortUniqueId({
       length: 15,
@@ -23,7 +24,7 @@ export class PictureService {
     });
 
     const donePath = path.join(__dirname, '/../../../temp/', `${uid()}.webp`);
-    let img = sharp(imagePath).resize(maxSize, maxSize, { fit: 'inside' });
+    let img = sharp(imagePath).resize(maxSize, maxSize, { fit });
 
     if (watermark) {
       const wmPath = path.join(__dirname, '/../../../assets/watermark.png');
