@@ -1,3 +1,9 @@
 body {
-  background-image: url(/img/background.png);
+  color: #FFFFFF;
+  background-color: #232323;
+}
+
+::selection {
+  color: #FFFFFF;
+  background: #349414;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-3 images-block">
+  <div class="card bg-dark mb-3 images-block">
     <form class="card-body" @submit.prevent="publish">
       <h5 class="card-title">
         Upload image
@@ -152,7 +152,7 @@
           </p>
         </div>
         <div class="d-grid gap-2">
-          <button class="btn btn-lg btn-primary" type="submit" :disabled="preload">
+          <button class="btn btn-lg btn-success" type="submit" :disabled="preload">
             <span v-if="preload" class="spinner-border spinner-border-sm" />
             Publish
           </button>
@@ -343,5 +343,10 @@ export default {
   .two-field-item {
     width: 49.7%;
     min-width: 150px;
+  }
+
+  .form-check-input:checked {
+    background-color: #3fb618;
+    border-color: #39a216;
   }
 </style>

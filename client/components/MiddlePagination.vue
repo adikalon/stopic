@@ -95,4 +95,20 @@ export default {
   .span-page {
     cursor: default;
   }
+
+  .page-link {
+    color: #ffffff;
+    background-color: #373a3c;
+    border: 1px solid #232323;
+  }
+
+  .disabled > * {
+    color: #7b7b7b;
+    background-color: #2b2d2f;
+  }
+
+  .active > * {
+    color: #373a3c;
+    background-color: #f8f9fa;
+  }
 </style>

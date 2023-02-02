@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-3 detail-block">
+  <div class="card bg-dark mb-3 detail-block">
     <div class="card-body">
       <h1 class="card-title main-header">
         {{ picture.header }}
@@ -26,7 +26,7 @@
         <li><b>Downloads: </b> {{ picture.downloads }}</li>
       </ul>
       <div class="d-grid">
-        <a class="btn btn-lg btn-primary" :href="picture.link">
+        <a class="btn btn-lg btn-success" :href="picture.link">
           Download for free after watching ads
         </a>
       </div>
@@ -34,7 +34,7 @@
         <NuxtLink
           v-for="tag in picture.tags"
           :key="tag.id"
-          class="badge bg-info tag-button tag-link"
+          class="badge bg-light tag-button tag-link"
           :to="`/?tag=${tag.id}`"
         >
           {{ tag.name }}
@@ -45,7 +45,7 @@
           Similar images
         </h3>
         <div class="similar-block">
-          <div v-for="sim in similar" :key="sim.id" class="card border-primary similar-item">
+          <div v-for="sim in similar" :key="sim.id" class="card border-dark similar-item">
             <NuxtLink :to="`/${sim.url}-${sim.id}`">
               <img
                 :src="`${host}/api/picture/${sim.id}/preview/${sim.previewName}.webp`"
@@ -135,7 +135,6 @@ export default {
 
   .content-desc {
     font-size: 1rem;
-    font-family: "Cabin Sketch",cursive;
     font-weight: 500;
     line-height: 1.2;
   }
@@ -230,7 +229,6 @@ export default {
   }
 
   .tag-link:hover {
-    color: #fff;
-    background-color: #158B9D !important;
+    background-color: #D3D4D5 !important;
   }
 </style>

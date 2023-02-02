@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-3 login-block">
+  <div class="card bg-dark mb-3 login-block">
     <div class="card-body">
       <h5 class="card-title">
         Enter access key
@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="d-grid gap-2 key-button">
-          <button class="btn btn-lg btn-primary" type="submit">
+          <button class="btn btn-lg btn-success" type="submit">
             Login
           </button>
         </div>

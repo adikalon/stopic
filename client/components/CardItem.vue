@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="`/${picture.url}-${picture.id}`">
-    <div class="card border-primary img-block">
+    <div class="img-block">
       <img
         :src="`${host}/api/picture/${picture.id}/preview/${picture.previewName}.webp`"
         :width="`${picture.previewWidth}px`"
@@ -38,8 +38,12 @@ export default {
     overflow: hidden;
     width: 320px;
     height: 320px;
-    background-color: #868e96;
     cursor: pointer;
+    opacity: 0.9;
+  }
+
+  .img-block:hover {
+    opacity: 1;
   }
 
   .img-image {

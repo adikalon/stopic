@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <NuxtLink class="navbar-brand" to="/">
           <h2 class="main-header">
@@ -102,13 +102,13 @@
       </div>
     </nav>
     <div v-if="tagsModal" class="tags-modal" data-tags="close" @click="closeTags">
-      <div class="tags-content card border-primary mb-3">
-        <button type="button" class="btn-close tags-close" data-tags="close" />
+      <div class="tags-content card text-white bg-dark mb-3">
+        <button type="button" class="btn-close btn-close-white tags-close" data-tags="close" />
         <NuxtLink
           v-for="tag in tags"
           :key="tag.id"
           data-tags="close"
-          class="badge bg-info tag-button tag-link"
+          class="badge bg-light tag-button tag-link"
           :to="`/?tag=${tag.id}`"
         >
           {{ tag.name }}
@@ -212,7 +212,7 @@ export default {
     height: 100%;
     overflow: auto;
     background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6);
   }
 
   .tags-content {
@@ -238,11 +238,11 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
-    color: #4d4d4d;
+    color: #ffffff;
   }
 
   .tags-close:hover {
-    color: #35252F;
+    color: #d2d2d2;
   }
 
   @media (max-width: 1300px) {
@@ -272,7 +272,6 @@ export default {
   }
 
   .tag-link:hover {
-    color: #fff;
-    background-color: #158B9D !important;
+    background-color: #D3D4D5 !important;
   }
 </style>
