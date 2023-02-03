@@ -105,6 +105,12 @@ export default {
   head () {
     return {
       title: `${this.picture.title} - ${process.env.appName}`,
+      link: [
+        {
+          rel: 'canonical',
+          href: `${this.host}/${this.picture.url}-${this.picture.id}`
+        }
+      ],
       meta: [
         {
           hid: 'description',
