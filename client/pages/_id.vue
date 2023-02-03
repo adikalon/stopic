@@ -209,6 +209,11 @@ export default {
     background-color: #868e96;
     cursor: pointer;
     margin-top: 5px;
+    opacity: 0.9;
+  }
+
+  .similar-item:hover {
+    opacity: 1;
   }
 
   .similar-image {
