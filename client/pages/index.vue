@@ -17,7 +17,6 @@ import CardItem from '@/components/CardItem'
 export default {
   name: 'IndexPage',
   components: { MiddlePagination, CardItem },
-
   async asyncData (context) {
     let host = 'http://server:3000'
 
@@ -60,6 +59,11 @@ export default {
     return {
       pictures: pic.data,
       pages: Math.ceil(+pic.headers['pagination-total'] / +pic.headers['pagination-limit'])
+    }
+  },
+  head () {
+    return {
+      title: `Free pictures only - ${process.env.appName}`
     }
   },
   watchQuery: [
