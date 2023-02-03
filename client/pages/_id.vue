@@ -83,6 +83,11 @@ export default {
 
     try {
       const pic = await app.$axios.get(`${host}/api/picture/${params.groups.id}`)
+
+      if (params.groups.url !== pic.data.url) {
+        return error({ statusCode: 404, message: 'Page not found' })
+      }
+
       const sim = await app.$axios.get(`${host}/api/picture/recommended/${params.groups.id}`)
       return {
         picture: pic.data,
