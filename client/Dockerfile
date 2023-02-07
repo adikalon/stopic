@@ -26,6 +26,7 @@ RUN \
   rm -rf ./assets \
   && rm -rf ./components \
   && rm -rf ./layouts \
+  && rm -rf ./middleware \
   && rm -rf ./pages \
   && rm -rf ./store \
   && rm ./.eslintrc.js
