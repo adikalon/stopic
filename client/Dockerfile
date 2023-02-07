@@ -1,6 +1,8 @@
 ARG tag
 
 FROM node:$tag AS development
+ARG app_name
+ARG app_url
 RUN \
   apk add --no-cache shadow \
   && mkdir -p /home/node/app \
@@ -10,7 +12,7 @@ USER node
 COPY --chown=node:node package*.json ./
 RUN npm install
 COPY --chown=node:node . .
-RUN npm run build
+RUN APP_NAME=${app_name} APP_URL=${app_url} npm run build
 
 FROM node:$tag AS production
 RUN \
