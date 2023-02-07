@@ -61,9 +61,33 @@ export default {
       pages: Math.ceil(+pic.headers['pagination-total'] / +pic.headers['pagination-limit'])
     }
   },
+  data () {
+    let canonical = `${process.env.apiUrl}/`
+
+    const queries = Object.keys(this.$route.query)
+      .sort()
+      .reduce((a, k) => {
+        a[k] = this.$route.query[k]
+        return a
+      }, {})
+
+    if (Object.keys(queries).length > 0) {
+      canonical = `${canonical}?${new URLSearchParams(queries).toString()}`
+    }
+
+    return {
+      canonical
+    }
+  },
   head () {
     return {
-      title: `Free pictures only - ${process.env.appName}`
+      title: `Free pictures only - ${process.env.appName}`,
+      link: [
+        {
+          rel: 'canonical',
+          href: this.canonical
+        }
+      ]
     }
   },
   watchQuery: [
