@@ -57,6 +57,8 @@ services:
         tag: ${TAG_NODE_CLIENT}
         app_name: ${APP_NAME}
         app_url: ${APP_URL}
+        yandex_metrika_id: ${YANDEX_METRIKA_ID}
+        google_analytics_id: ${GOOGLE_ANALYTICS_ID}
       context: ./client
       target: production
     command: npm run start
