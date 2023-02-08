@@ -2,6 +2,10 @@ export default {
   server: {
     host: '0.0.0.0'
   },
+  loading: {
+    color: '#349414',
+    height: '5px'
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: process.env.APP_NAME || '',
