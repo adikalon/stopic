@@ -3,6 +3,7 @@ ARG tag
 FROM node:$tag AS development
 ARG app_name
 ARG app_url
+ARG yandex_webmaster_id
 ARG yandex_metrika_id
 ARG google_analytics_id
 RUN \
@@ -14,7 +15,7 @@ USER node
 COPY --chown=node:node package*.json ./
 RUN npm install
 COPY --chown=node:node . .
-RUN APP_NAME=${app_name} APP_URL=${app_url} YANDEX_METRIKA_ID=${yandex_metrika_id} GOOGLE_ANALYTICS_ID=${google_analytics_id} npm run build
+RUN APP_NAME=${app_name} APP_URL=${app_url} YANDEX_WEBMASTER_ID=${yandex_webmaster_id} YANDEX_METRIKA_ID=${yandex_metrika_id} GOOGLE_ANALYTICS_ID=${google_analytics_id} npm run build
 
 FROM node:$tag AS production
 RUN \

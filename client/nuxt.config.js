@@ -65,6 +65,7 @@ export default {
   env: {
     appName: process.env.APP_NAME || '',
     apiUrl: (process.env.APP_URL || '').replace(/\/$/, ''),
+    googleWebmasterId: process.env.YANDEX_WEBMASTER_ID || '',
     yandexMetrikaId: process.env.YANDEX_METRIKA_ID || '',
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || ''
   }

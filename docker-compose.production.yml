@@ -57,6 +57,7 @@ services:
         tag: ${TAG_NODE_CLIENT}
         app_name: ${APP_NAME}
         app_url: ${APP_URL}
+        yandex_webmaster_id: ${YANDEX_WEBMASTER_ID}
         yandex_metrika_id: ${YANDEX_METRIKA_ID}
         google_analytics_id: ${GOOGLE_ANALYTICS_ID}
       context: ./client

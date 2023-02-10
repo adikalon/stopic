@@ -2,6 +2,12 @@
 <html {{ HTML_ATTRS }}>
   <head {{ HEAD_ATTRS }}>
     {{ HEAD }}
+
+    {% if (process.env.NODE_ENV === 'production') { %}
+      {% if (process.env.YANDEX_WEBMASTER_ID) { %}
+        <meta name="yandex-verification" content="{{ ENV.googleWebmasterId }}">
+      {% } %}
+    {% } %}
   </head>
 
   <body {{ BODY_ATTRS }}>
