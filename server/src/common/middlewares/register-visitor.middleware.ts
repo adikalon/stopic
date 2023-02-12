@@ -16,6 +16,9 @@ export class RegisterVisitorMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: VisitorRequest, _res: Response, next: NextFunction) {
+    console.log(req);
+    console.log(req.clientIp);
+    console.log(req.clientIp);
     const ip = req.clientIp;
     const ua = req.header('user-agent');
 

@@ -9,6 +9,8 @@ services:
       DOZZLE_PASSWORD: ${DOZZLE_PASSWORD}
       DOZZLE_NO_ANALYTICS: true
     image: amir20/dozzle:${TAG_DOZZLE}
+    ports:
+      - ${PORT_DOZZLE}:8080
     restart: ${RESTART}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -33,6 +35,8 @@ services:
     environment:
       ADMINER_DEFAULT_SERVER: postgres
     image: adminer:${TAG_ADMINER}
+    ports:
+      - ${PORT_ADMINER}:8080
     restart: ${RESTART}
 
   server:
@@ -46,6 +50,8 @@ services:
       - postgres
     env_file:
       - .env
+    ports:
+      - ${PORT_SERVER}:3000
     restart: ${RESTART}
     volumes:
       - temp:/home/node/app/temp
@@ -67,6 +73,8 @@ services:
       - server
     env_file:
       - .env
+    ports:
+      - ${PORT_CLIENT}:3000
     restart: ${RESTART}
 
   nginx:
@@ -77,9 +85,7 @@ services:
       - adminer
       - server
     image: nginx:${TAG_NGINX}
-    ports:
-      - ${PORT_HTTP}:80
-      - ${PORT_HTTPS}:443
+    network_mode: host
     restart: ${RESTART}
     volumes:
       - type: bind
@@ -89,18 +95,6 @@ services:
       - type: bind
         source: ./nginx/http.conf
         target: /etc/nginx/templates/default.conf.template
-        read_only: true
-      - type: bind
-        source: ./nginx/https.conf
-        target: /etc/nginx/templates/https.conf.template
-        read_only: true
-      - type: bind
-        source: ./nginx/ssl.crt
-        target: /etc/nginx/ssl.crt
-        read_only: true
-      - type: bind
-        source: ./nginx/ssl.key
-        target: /etc/nginx/ssl.key
         read_only: true
 
 volumes:
