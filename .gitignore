@@ -3,6 +3,4 @@
 /server/assets/watermark.png
 /client/node_modules
 /client/.nuxt
-/nginx/ssl.crt
-/nginx/ssl.key
 /.env
