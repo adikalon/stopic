@@ -33,6 +33,7 @@ RUN \
   && rm -rf ./layouts \
   && rm -rf ./middleware \
   && rm -rf ./pages \
+  && rm -rf ./plugins \
   && rm -rf ./store \
   && rm ./app.html \
   && rm ./.eslintrc.js

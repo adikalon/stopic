@@ -78,6 +78,7 @@ services:
       - ./client/layouts:/home/node/app/layouts
       - ./client/middleware:/home/node/app/middleware
       - ./client/pages:/home/node/app/pages
+      - ./client/plugins:/home/node/app/plugins
       - ./client/static:/home/node/app/static
       - ./client/store:/home/node/app/store
 

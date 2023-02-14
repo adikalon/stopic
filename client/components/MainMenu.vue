@@ -138,7 +138,7 @@ export default {
       host = process.env.apiUrl
     }
 
-    this.tags = await fetch(`${host}/api/tag/popular`).then(res => res.json())
+    this.tags = (await this.$axios.get(`${host}/api/tag/popular`)).data
   },
   methods: {
     toggleAdvSerach () {
