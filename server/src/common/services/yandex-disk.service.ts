@@ -20,7 +20,7 @@ export class YandexDiskService {
         method: 'PUT',
         url: 'https://cloud-api.yandex.net/v1/disk/resources',
         params: { path: subFolder },
-        timeout: 15000,
+        timeout: 180000,
         validateStatus: () => true,
         headers: {
           Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
@@ -37,7 +37,7 @@ export class YandexDiskService {
         method: 'GET',
         url: 'https://cloud-api.yandex.net/v1/disk/resources/upload',
         params: { path: `${subFolder}/${path.basename(filePath)}` },
-        timeout: 15000,
+        timeout: 180000,
         validateStatus: () => true,
         headers: {
           Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
@@ -57,7 +57,7 @@ export class YandexDiskService {
       this.httpService.request({
         method: 'PUT',
         url: linkForFileUpload.data.href,
-        timeout: 15000,
+        timeout: 180000,
         validateStatus: () => true,
         headers: {
           Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
@@ -77,7 +77,7 @@ export class YandexDiskService {
         method: 'GET',
         url: 'https://cloud-api.yandex.net/v1/disk/resources/download',
         params: { path: diskPath },
-        timeout: 15000,
+        timeout: 180000,
         validateStatus: () => true,
         headers: {
           Authorization: `OAuth ${this.configService.get('YANDEX_DISK_KEY')}`,
@@ -97,7 +97,7 @@ export class YandexDiskService {
       this.httpService.request({
         method: 'GET',
         url: downloadlink.data.href,
-        timeout: 15000,
+        timeout: 180000,
         responseType: 'stream',
         validateStatus: () => true,
       }),

@@ -32,7 +32,7 @@ export class DownloadController {
   ) {}
 
   @Get('/:token')
-  @RequestTimeout(15000)
+  @RequestTimeout(30000)
   async download(
     @Req() req: VisitorRequest,
     @Res({ passthrough: true }) res: Response,
