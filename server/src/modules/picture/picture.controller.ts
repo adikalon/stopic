@@ -66,7 +66,7 @@ export class PictureController {
   ) {}
 
   @Post('/')
-  @RequestTimeout(30000)
+  @RequestTimeout(300000)
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor('image', {
