@@ -348,7 +348,12 @@ export class PictureController {
       file,
     );
 
+    const expires = new Date(new Date().getTime() + 2500000000).toUTCString();
+
     res.set('Content-Type', 'image/webp');
+    res.set('Cache-Control', 'public, max-age=2500000');
+    res.set('Pragma', 'cache');
+    res.set('Expires', expires);
     const imageContent = await fsPromises.readFile(imagePath);
 
     return new StreamableFile(imageContent);
