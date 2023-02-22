@@ -71,6 +71,10 @@ export default {
         return a
       }, {})
 
+    if (queries.page && queries.page === '1') {
+      delete queries.page
+    }
+
     if (Object.keys(queries).length > 0) {
       canonical = `${canonical}?${new URLSearchParams(queries).toString()}`
     }
