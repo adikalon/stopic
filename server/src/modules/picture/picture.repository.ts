@@ -359,7 +359,7 @@ export class PictureRepository extends Repository<Picture> {
         'picture.id AS "id"',
         'picture.url AS "url"',
         'picture.bigName AS "name"',
-        'picture.title AS "title"',
+        'picture.content AS "title"',
         'picture.bigAlt AS "alt"',
         'picture.updatedDate AS "updated"',
       ])
