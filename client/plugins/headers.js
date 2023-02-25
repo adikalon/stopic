@@ -1,7 +1,7 @@
 export default function ({ $axios, req }) {
   if (req !== undefined) {
-    const host = req.headers.host || 'unknown'
-    const userAgent = req.headers['user-agent'] || 'unknown'
+    const host = req.headers.host || ''
+    const userAgent = req.headers['user-agent'] || ''
     const forv = req.headers['x-forwarded-for'] || req.socket.remoteAddress
     const real = req.headers['x-real-ip'] || req.socket.remoteAddress
 

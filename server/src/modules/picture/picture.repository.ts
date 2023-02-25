@@ -4,6 +4,7 @@ import { View } from '../view/view.entity';
 import { ItemsDto } from './dto/items.dto';
 import { PictureDataDto } from './dto/picture-data.dto';
 import { RecommendedDto } from './dto/recommended.dto';
+import { SitemapDto } from './dto/sitemap.dto';
 import { CreateInterface } from './interfaces/create.interface';
 import { EditInterface } from './interfaces/edit.interface';
 import { ItemsInterface } from './interfaces/items.interface';
@@ -350,5 +351,23 @@ export class PictureRepository extends Repository<Picture> {
       .execute();
 
     return { count, recs };
+  }
+
+  async getSitemapItems(): Promise<SitemapDto[]> {
+    const recs: SitemapDto[] = await this.createQueryBuilder('picture')
+      .select([
+        'picture.id AS "id"',
+        'picture.url AS "url"',
+        'picture.bigName AS "name"',
+        'picture.title AS "title"',
+        'picture.bigAlt AS "alt"',
+        'picture.updatedDate AS "updated"',
+      ])
+      .where('picture.active = :active', { active: true })
+      .orderBy('picture.id', 'DESC')
+      .limit(50000)
+      .execute();
+
+    return recs;
   }
 }

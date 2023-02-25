@@ -20,5 +20,6 @@ import { PictureService } from './picture.service';
   ],
   controllers: [PictureController],
   providers: [PictureService, YandexDiskService, CatCutService],
+  exports: [TypeOrmModule],
 })
 export class PictureModule {}

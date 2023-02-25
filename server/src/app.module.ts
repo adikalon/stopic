@@ -22,6 +22,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import TypeORMConfig from './ormconfig';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { AppService } from './app.service';
+import { IndexModule } from './modules/index/index.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AppService } from './app.service';
     /**
      * Custom modules
      */
+    IndexModule,
     MimeModule,
     PictureModule,
     TagModule,
