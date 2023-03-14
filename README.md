@@ -17,3 +17,5 @@
 Админка: `/admin`<br>
 База Данных: `/admin/adminer`<br>
 Логи: `/admin/dozzle`<br>
+### Пример работы сайта:
+http://stopic.fun/
